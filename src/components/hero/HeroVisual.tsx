@@ -72,7 +72,7 @@ export function HeroVisual() {
       </div>
 
       {/* Photo frame + decorative rings */}
-      <div className="relative">
+      <div className="relative overflow-visible">
 
         {/* Slow-spinning dashed orbit rings */}
         <motion.div

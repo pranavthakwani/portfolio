@@ -20,14 +20,14 @@ const config: Config = {
           900: '#0F172A',
           950: '#020617',
         },
-        // Clean white — backgrounds
+        // Warm cream — paper/parchment backgrounds
         paper: {
-          DEFAULT: '#FAFBFC',
-          50:  '#FFFFFF',
-          100: '#F8FAFC',
-          200: '#F1F5F9',
-          300: '#E8EEF5',
-          400: '#DDE5EE',
+          DEFAULT: '#FAF6EE',
+          50:  '#FFFDF8',
+          100: '#FAF6EE',
+          200: '#F2EAD8',
+          300: '#E8DCC8',
+          400: '#DBCBB4',
         },
         // Vibrant indigo — primary brand, CTAs (confident, tech-forward)
         purple: {

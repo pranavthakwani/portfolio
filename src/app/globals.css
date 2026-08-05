@@ -11,11 +11,11 @@
   --amber:  249 115 22;    /* orange-500 */
   --teal:   16 185 129;    /* emerald-500 */
 
-  /* Surface elevations */
-  --surface-0: #ffffff;
-  --surface-1: #f8fafc;
-  --surface-2: #f1f5f9;
-  --surface-3: #e8eef5;
+  /* Surface elevations — warm paper family */
+  --surface-0: #fffdf8;
+  --surface-1: #faf6ee;
+  --surface-2: #f2ead8;
+  --surface-3: #e8dcc8;
 
   /* Border */
   --border-subtle:  rgba(15, 23, 42, 0.06);
@@ -46,12 +46,12 @@
     @apply font-sans text-ink-900;
     font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
     overflow-x: hidden;
-    /* Warm paper base with subtle grain */
-    background-color: #FAFAF7;
+    /* Warm cream paper base — like writing on ivory stationery */
+    background-color: #FAF6EE;
     background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.09'/%3E%3C/svg%3E");
     background-repeat: repeat;
-    background-size: 400px 400px;
+    background-size: 300px 300px;
   }
 
   /* Selection colour — indigo brand */
@@ -115,9 +115,7 @@
 
   /* ── Paper section backgrounds ── */
   .paper-section {
-    background-color: rgba(255, 255, 255, 0.72);
-    background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-color: #FAF6EE;
   }
 
   /* ── Glass morphism card — iOS-inspired frosted glass ── */

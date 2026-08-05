@@ -56,7 +56,7 @@ export function HeroIntro() {
       {/* Main heading — handwritten Caveat font */}
       <motion.div variants={item}>
         <h1
-          className="font-accent text-7xl sm:text-8xl font-bold text-ink-900 leading-[1.05] mb-5"
+          className="font-accent text-5xl sm:text-7xl lg:text-8xl font-bold text-ink-900 leading-[1.05] mb-5"
           style={{ letterSpacing: '-0.01em' }}
         >
           Hi, I&apos;m{' '}

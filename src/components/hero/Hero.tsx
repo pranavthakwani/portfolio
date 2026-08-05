@@ -22,19 +22,19 @@ export function Hero() {
     <section
       id="home"
       className="relative min-h-screen flex flex-col overflow-hidden"
-      style={{ backgroundColor: '#FAFAF7' }}
+      style={{ backgroundColor: '#FAF6EE' }}
     >
       {/* ── Background: person walking in from left, stopping at right ─── */}
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
 
         {/* Paper grain overlay */}
         <div
-          className="absolute inset-0 opacity-[0.055]"
+          className="absolute inset-0 opacity-100"
           style={{
             backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E\")",
+              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.09'/%3E%3C/svg%3E\")",
             backgroundRepeat: 'repeat',
-            backgroundSize: '400px 400px',
+            backgroundSize: '300px 300px',
           }}
         />
 
@@ -90,9 +90,9 @@ export function Hero() {
         </motion.div>
 
         {/* Left gradient mask — ensures text readability over the background */}
-        <div className="absolute inset-y-0 left-0 w-[65%] bg-gradient-to-r from-[#FAFAF7] via-[#FAFAF7]/95 to-transparent" />
+        <div className="absolute inset-y-0 left-0 w-[65%] bg-gradient-to-r from-[#FAF6EE] via-[#FAFAF7]/95 to-transparent" />
         {/* Bottom gradient */}
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#FAFAF7]/60 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#FAF6EE]/60 to-transparent" />
       </div>
 
       {/* ── Foreground: intro text — overlaid on the left ────────────── */}

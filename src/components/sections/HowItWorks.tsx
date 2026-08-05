@@ -45,7 +45,7 @@ const stepVariants = {
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="relative py-20 bg-white section-divider">
+    <section id="how-it-works" className="relative py-20 bg-paper-50 section-divider">
       <Container>
 
         {/* Heading */}
@@ -61,7 +61,7 @@ export function HowItWorks() {
             Under the hood
             <span className="h-px w-5 bg-purple-400 rounded-full" />
           </span>
-          <h2 className="text-display-md font-bold text-ink-900 leading-tight tracking-tight">
+          <h2 className="font-accent text-display-md font-bold text-ink-900 leading-tight">
             Not a scripted chatbot.{' '}
             <UnderlineAccent color="teal">A real RAG system.</UnderlineAccent>
           </h2>

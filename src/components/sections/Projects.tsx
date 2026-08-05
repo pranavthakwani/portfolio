@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils/cn';
 /* ── Project Detail Modal ────────────────────────────────────────────── */
 function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
   return (
-    <AnimatePresence>
+    <>
       {/* Backdrop */}
       <motion.div
         key="backdrop"
@@ -116,7 +116,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           )}
         </div>
       </motion.div>
-    </AnimatePresence>
+    </>
   );
 }
 
@@ -215,13 +215,16 @@ export function Projects() {
         </motion.p>
       </SectionWrapper>
 
-      {/* Modal portal */}
-      {selectedProject && (
-        <ProjectModal
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-        />
-      )}
+      {/* Modal portal — AnimatePresence here so exit animations fire on unmount */}
+      <AnimatePresence>
+        {selectedProject && (
+          <ProjectModal
+            key={selectedProject.id}
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }
