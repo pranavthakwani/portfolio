@@ -10,7 +10,13 @@
       "PowerShell(New-Item *)",
       "Read(//c/Users/prana/**)",
       "Read(//c/nvm4w/nodejs/etc/**)",
-      "PowerShell(Get-Command *)"
+      "PowerShell(Get-Command *)",
+      "Bash(command -v pnpm)",
+      "Bash(command -v yarn)",
+      "Bash(command -v bun)",
+      "Bash(yarn --version)",
+      "Bash(yarn install:*)",
+      "Bash(yarn next:*)"
     ]
   }
 }

@@ -7,7 +7,13 @@ import { cn } from '@/lib/utils/cn';
 type Variant = 'primary' | 'secondary' | 'ghost' | 'outline';
 type Size    = 'sm' | 'md' | 'lg';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+// Omit DOM animation event handlers that conflict with Framer Motion's types
+type ButtonHTMLProps = Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'onAnimationStart' | 'onAnimationEnd' | 'onAnimationIteration' | 'onDragStart' | 'onDragEnd' | 'onDrag'
+>;
+
+interface ButtonProps extends ButtonHTMLProps {
   variant?: Variant;
   size?: Size;
   loading?: boolean;

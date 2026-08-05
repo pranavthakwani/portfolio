@@ -15,6 +15,9 @@ import type { CSSProperties } from 'react';
 
 // Register only the languages we need (lighter bundle)
 SyntaxHighlighter.registerLanguage('tsx', tsx);
+
+// Type compatibility shim — react-syntax-highlighter typing lags @types/react 18
+const Prism = SyntaxHighlighter as any; // eslint-disable-line
 SyntaxHighlighter.registerLanguage('typescript', typescript);
 SyntaxHighlighter.registerLanguage('ts', typescript);
 SyntaxHighlighter.registerLanguage('python', python);
@@ -93,7 +96,7 @@ function CodeBlock({ language, children }: { language: string; children: string 
         <CopyButton text={children} />
       </div>
       {/* Highlighted code */}
-      <SyntaxHighlighter
+      <Prism
         language={language || 'text'}
         style={codeTheme}
         customStyle={{
@@ -105,7 +108,7 @@ function CodeBlock({ language, children }: { language: string; children: string 
         PreTag="div"
       >
         {children}
-      </SyntaxHighlighter>
+      </Prism>
     </div>
   );
 }
@@ -119,7 +122,7 @@ const components: Components = {
     const content = String(children).replace(/\n$/, '');
 
     if (isBlock) {
-      return <CodeBlock language={match?.[1] ?? 'text'} children={content} />;
+      return <CodeBlock language={match?.[1] ?? 'text'}>{content}</CodeBlock>;
     }
 
     return (
