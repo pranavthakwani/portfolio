@@ -1,0 +1,39 @@
+import { cn } from '@/lib/utils/cn';
+
+interface ContainerProps {
+  children: React.ReactNode;
+  className?: string;
+  as?: React.ElementType;
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+}
+
+const sizeClasses: Record<NonNullable<ContainerProps['size']>, string> = {
+  sm:   'max-w-2xl',
+  md:   'max-w-4xl',
+  lg:   'max-w-6xl',
+  xl:   'max-w-7xl',
+  full: 'max-w-none',
+};
+
+/**
+ * Page-level width container with horizontal padding.
+ * All sections use this as their outermost content wrapper.
+ */
+export function Container({
+  children,
+  className,
+  as: Tag = 'div',
+  size = 'xl',
+}: ContainerProps) {
+  return (
+    <Tag
+      className={cn(
+        'mx-auto w-full px-6 sm:px-8 lg:px-12',
+        sizeClasses[size],
+        className
+      )}
+    >
+      {children}
+    </Tag>
+  );
+}
