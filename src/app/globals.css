@@ -4,25 +4,25 @@
 
 /* ─── CSS Custom Properties ──────────────────────────────────────── */
 :root {
-  /* Colors as raw RGB channels for opacity compositing */
-  --ink:    26 25 25;
-  --paper:  250 250 248;
-  --purple: 102 84 163;
-  --amber:  224 123 57;
-  --teal:   47 156 142;
+  /* Updated to match new vibrant color scheme */
+  --ink:    15 23 42;      /* slate-900 */
+  --paper:  250 251 252;
+  --purple: 79 70 229;     /* indigo-600 */
+  --amber:  249 115 22;    /* orange-500 */
+  --teal:   16 185 129;    /* emerald-500 */
 
   /* Surface elevations */
   --surface-0: #ffffff;
-  --surface-1: #fafaf8;
-  --surface-2: #f4f3f0;
-  --surface-3: #eae9e4;
+  --surface-1: #f8fafc;
+  --surface-2: #f1f5f9;
+  --surface-3: #e8eef5;
 
   /* Border */
-  --border-subtle: rgba(26, 25, 25, 0.07);
-  --border-default: rgba(26, 25, 25, 0.11);
-  --border-strong: rgba(26, 25, 25, 0.18);
+  --border-subtle:  rgba(15, 23, 42, 0.06);
+  --border-default: rgba(15, 23, 42, 0.10);
+  --border-strong:  rgba(15, 23, 42, 0.16);
 
-  /* Section rhythm — generous spacing */
+  /* Section rhythm */
   --section-padding-y: clamp(5rem, 10vw, 9rem);
   --section-padding-x: clamp(1.5rem, 5vw, 4rem);
 }
@@ -43,96 +43,105 @@
   }
 
   body {
-    @apply font-sans text-ink-900 bg-paper-100;
+    @apply font-sans text-ink-900;
     font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
     overflow-x: hidden;
+    /* Warm paper base with subtle grain */
+    background-color: #FAFAF7;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 400px 400px;
   }
 
-  /* Selection colour — on-brand */
+  /* Selection colour — indigo brand */
   ::selection {
-    background-color: rgba(102, 84, 163, 0.15);
-    color: #1A1919;
+    background-color: rgba(79, 70, 229, 0.15);
+    color: #0F172A;
   }
 
-  /* Focus ring — accessible but elegant */
+  /* Focus ring */
   :focus-visible {
-    outline: 2px solid rgba(102, 84, 163, 0.6);
+    outline: 2px solid rgba(79, 70, 229, 0.6);
     outline-offset: 3px;
     border-radius: 4px;
   }
 
-  /* Remove default focus when not keyboard navigating */
   :focus:not(:focus-visible) {
     outline: none;
   }
 
-  /* Headings — tight tracking by default */
   h1, h2, h3, h4, h5, h6 {
     @apply font-sans font-bold tracking-tight text-ink-900;
     line-height: 1.15;
   }
 
-  /* Paragraphs — comfortable reading */
   p {
     @apply leading-relaxed text-ink-600;
   }
 
-  /* Links — no underline by default; components style as needed */
   a {
     color: inherit;
     text-decoration: none;
   }
 
-  /* Inputs inherit font */
   input, textarea, button, select {
     font-family: inherit;
     font-size: inherit;
   }
 
-  /* Scrollbar — thin, unobtrusive */
-  ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: rgba(26, 25, 25, 0.12);
-    border-radius: 999px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(26, 25, 25, 0.22);
-  }
+  /* Thin, unobtrusive scrollbar */
+  ::-webkit-scrollbar        { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track  { background: transparent; }
+  ::-webkit-scrollbar-thumb  { background: rgba(15,23,42,0.12); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(15,23,42,0.22); }
 }
 
-/* ─── Utility Layer Additions ─────────────────────────────────────── */
+/* ─── Utility Layer ───────────────────────────────────────────────── */
 @layer utilities {
-  /* Section vertical rhythm */
   .section-py {
     padding-top: var(--section-padding-y);
     padding-bottom: var(--section-padding-y);
   }
 
-  /* Textured background — very subtle noise for depth */
-  .bg-noise {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 200px 200px;
-  }
-
-  /* Section divider — soft horizontal rule */
   .section-divider {
     @apply border-t border-ink-100;
   }
 
-  /* Gradient fade — used to gently fade edges of scrollable areas */
   .fade-bottom {
     mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
   }
 
-  /* Chat message content styles */
+  /* ── Paper section backgrounds ── */
+  .paper-section {
+    background-color: rgba(255, 255, 255, 0.72);
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  }
+
+  /* ── Glass morphism card — iOS-inspired frosted glass ── */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    border: 1px solid rgba(255, 255, 255, 0.88);
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
+  }
+
+  /* ── Glass panel — slightly stronger for large surfaces ── */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    border: 1px solid rgba(255, 255, 255, 0.90);
+    box-shadow:
+      0 0 0 1px rgba(79,70,229,0.06),
+      0 4px 16px rgba(15,23,42,0.06),
+      0 20px 60px rgba(15,23,42,0.07);
+  }
+
+  /* ── Chat message prose ── */
   .prose-chat {
     @apply text-sm leading-relaxed text-ink-700;
   }
@@ -156,7 +165,7 @@
   .prose-chat li:last-child { @apply mb-0; }
 
   .prose-chat strong { @apply font-semibold text-ink-900; }
-  .prose-chat em { @apply italic; }
+  .prose-chat em     { @apply italic; }
 
   .prose-chat a {
     @apply text-purple-500 hover:text-purple-600 underline underline-offset-2 transition-colors;
@@ -167,7 +176,7 @@
   }
 
   .prose-chat code:not(pre code) {
-    @apply bg-ink-50 text-ink-700 px-1.5 py-0.5 rounded text-xs font-mono;
+    @apply bg-ink-100 text-ink-700 px-1.5 py-0.5 rounded text-xs font-mono;
   }
 
   .prose-chat pre {
@@ -185,15 +194,11 @@
   }
   .prose-chat tr:last-child td { @apply border-0; }
 
-  /* Handwritten accent font utility */
-  .font-handwritten {
-    @apply font-accent;
-  }
+  .font-handwritten { @apply font-accent; }
 }
 
 /* ─── Component Layer ─────────────────────────────────────────────── */
 @layer components {
-  /* The floating nav items */
   .nav-item {
     @apply font-sans font-medium text-sm text-ink-400 transition-all duration-300 cursor-pointer
            hover:text-ink-900 relative py-1;
@@ -205,19 +210,21 @@
     font-size: 0.9375rem;
   }
 
-  /* Chat bubble base */
   .chat-bubble {
     @apply rounded-2xl px-4 py-3 text-sm leading-relaxed max-w-[85%];
   }
 
   .chat-bubble-user {
-    @apply chat-bubble bg-purple-50 text-ink-800 ml-auto;
-    border: 1px solid rgba(102, 84, 163, 0.12);
+    @apply chat-bubble ml-auto;
+    background: rgba(79, 70, 229, 0.07);
+    color: #0F172A;
+    border: 1px solid rgba(79, 70, 229, 0.10);
   }
 
   .chat-bubble-assistant {
-    @apply chat-bubble bg-white text-ink-700;
+    @apply chat-bubble text-ink-700;
+    background: rgba(255, 255, 255, 0.9);
     border: 1px solid var(--border-subtle);
-    box-shadow: 0 1px 3px rgba(26,25,25,0.04);
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
   }
 }

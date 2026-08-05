@@ -2,159 +2,226 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, TrendingUp, Github, FileText } from 'lucide-react';
+import { X, ArrowUpRight, TrendingUp, Github, ExternalLink, ChevronRight } from 'lucide-react';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Badge } from '@/components/ui/Badge';
-import { UnderlineAccent } from '@/components/ui/AccentMark';
+import { HighlightAccent, UnderlineAccent } from '@/components/ui/AccentMark';
 import { projects } from '@/lib/data/projects';
-import type { Project, ProjectCategory } from '@/types';
+import type { Project } from '@/types';
 import { cn } from '@/lib/utils/cn';
 
-const ALL_CATEGORIES: { label: string; value: ProjectCategory | 'All' }[] = [
-  { label: 'All',           value: 'All' },
-  { label: 'RAG',           value: 'RAG' },
-  { label: 'Agents',        value: 'Agent' },
-  { label: 'Automation',    value: 'Automation' },
-  { label: 'Integration',   value: 'Integration' },
-];
+/* ── Project Detail Modal ────────────────────────────────────────────── */
+function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
+  return (
+    <AnimatePresence>
+      {/* Backdrop */}
+      <motion.div
+        key="backdrop"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-50 bg-ink-950/50 backdrop-blur-md"
+        onClick={onClose}
+      />
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+      {/* Modal panel */}
+      <motion.div
+        key="modal"
+        initial={{ opacity: 0, y: 48, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 48, scale: 0.97 }}
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        className="fixed inset-x-4 top-8 bottom-8 sm:inset-x-8 lg:inset-x-auto lg:left-1/2 lg:-translate-x-1/2 lg:w-full lg:max-w-2xl z-50 overflow-y-auto rounded-3xl bg-white shadow-soft-xl border border-ink-100"
+        style={{ scrollbarWidth: 'thin' }}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute top-5 right-5 z-10 flex items-center justify-center w-9 h-9 rounded-xl bg-paper-200 text-ink-400 hover:text-ink-800 hover:bg-paper-300 transition-all"
+        >
+          <X size={16} />
+        </button>
+
+        <div className="p-7 sm:p-10">
+          {/* Category + featured */}
+          <div className="flex items-center gap-2 mb-5">
+            <Badge variant="purple" size="sm">{project.category}</Badge>
+            {project.featured && (
+              <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest">Featured</span>
+            )}
+          </div>
+
+          {/* Title */}
+          <h2 className="font-accent text-3xl sm:text-4xl font-bold text-ink-900 leading-tight mb-2">
+            {project.title}
+          </h2>
+          <p className="text-sm font-medium text-ink-500 mb-7">{project.tagline}</p>
+
+          {/* Description */}
+          <p className="text-sm text-ink-600 leading-relaxed mb-7">{project.description}</p>
+
+          {/* Architecture */}
+          {project.architectureHighlight && (
+            <div className="mb-7 p-4 bg-ink-900 rounded-2xl">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-500 mb-2">Architecture</p>
+              <p className="text-xs font-mono text-teal-300 leading-relaxed">
+                {project.architectureHighlight}
+              </p>
+            </div>
+          )}
+
+          {/* Outcome */}
+          <div className="flex items-start gap-3 mb-7 p-4 bg-teal-50 border border-teal-100 rounded-2xl">
+            <TrendingUp size={14} className="text-teal-500 shrink-0 mt-0.5" />
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-teal-500 mb-1">Business outcome</p>
+              <p className="text-sm text-teal-700 font-semibold leading-relaxed">{project.outcome}</p>
+            </div>
+          </div>
+
+          {/* Tags */}
+          <div className="flex flex-wrap gap-1.5 mb-7">
+            {project.tags.map((tag) => (
+              <Badge key={tag} variant="outline" size="sm">{tag}</Badge>
+            ))}
+          </div>
+
+          {/* Links */}
+          {project.links && Object.values(project.links).some(Boolean) && (
+            <div className="flex items-center gap-4 pt-6 border-t border-paper-200">
+              {project.links.github && (
+                <a
+                  href={project.links.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-500 hover:text-ink-900 transition-colors"
+                >
+                  <Github size={14} /> View Code
+                </a>
+              )}
+              {project.links.caseStudy && project.links.caseStudy !== '#' && (
+                <a
+                  href={project.links.caseStudy}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-purple-500 hover:text-purple-700 transition-colors"
+                >
+                  <ExternalLink size={14} /> Case Study <ArrowUpRight size={11} />
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+/* ── Minimal project list item ──────────────────────────────────────── */
+function ProjectRow({
+  project,
+  index,
+  onOpen,
+}: {
+  project: Project;
+  index: number;
+  onOpen: (p: Project) => void;
+}) {
   return (
     <motion.article
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-5%' }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: index * 0.07 }}
-      whileHover={{ y: -4 }}
+      transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1], delay: index * 0.06 }}
+      onClick={() => onOpen(project)}
       className={cn(
-        'group flex flex-col bg-white rounded-2xl border border-ink-100 shadow-soft',
-        'hover:shadow-card-hover hover:border-ink-200 transition-all duration-300',
-        'overflow-hidden'
+        'group flex items-start sm:items-center gap-5 p-5 sm:p-6 rounded-2xl border border-ink-100 bg-white/80 cursor-pointer',
+        'hover:border-purple-200 hover:shadow-soft-md hover:bg-white transition-all duration-250'
       )}
     >
-      {/* Category tag */}
-      <div className="px-5 pt-5 pb-3 border-b border-paper-200 flex items-center justify-between">
-        <Badge variant="purple" size="sm">{project.category}</Badge>
-        {project.featured && (
-          <span className="text-[10px] font-semibold text-amber-500 uppercase tracking-wider">
-            Featured
-          </span>
-        )}
-      </div>
+      {/* Index number */}
+      <span className="shrink-0 font-accent text-3xl font-bold text-ink-200 leading-none w-10 text-right hidden sm:block">
+        {String(index + 1).padStart(2, '0')}
+      </span>
 
       {/* Content */}
-      <div className="flex-1 flex flex-col p-5">
-        <h3 className="text-sm font-bold text-ink-900 mb-1.5 leading-snug group-hover:text-purple-600 transition-colors duration-200">
-          {project.title}
-        </h3>
-        <p className="text-xs text-ink-500 mb-3 font-medium">{project.tagline}</p>
-        <p className="text-xs text-ink-500 leading-relaxed mb-4 flex-1">
-          {project.description}
-        </p>
-
-        {/* Architecture highlight */}
-        {project.architectureHighlight && (
-          <div className="mb-4 px-3 py-2 bg-paper-200 rounded-xl">
-            <p className="text-[10px] font-mono text-ink-500 leading-relaxed">
-              {project.architectureHighlight}
-            </p>
-          </div>
-        )}
-
-        {/* Business outcome */}
-        <div className="flex items-start gap-2 mb-4 p-3 bg-teal-50 border border-teal-100 rounded-xl">
-          <TrendingUp size={12} className="text-teal-500 shrink-0 mt-0.5" />
-          <p className="text-xs text-teal-700 leading-relaxed font-medium">
-            {project.outcome}
-          </p>
+      <div className="flex-1 min-w-0">
+        <div className="flex flex-wrap items-center gap-2 mb-1.5">
+          <h3 className="text-sm font-bold text-ink-900 group-hover:text-purple-600 transition-colors duration-200">
+            {project.title}
+          </h3>
+          <Badge variant="purple" size="sm">{project.category}</Badge>
+          {project.featured && (
+            <span className="text-[9px] font-bold text-amber-500 uppercase tracking-widest">★ Featured</span>
+          )}
         </div>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {project.tags.map((tag) => (
+        <p className="text-xs text-ink-500 mb-2.5">{project.tagline}</p>
+        <div className="flex flex-wrap gap-1.5">
+          {project.tags.slice(0, 4).map((tag) => (
             <Badge key={tag} variant="outline" size="sm">{tag}</Badge>
           ))}
+          {project.tags.length > 4 && (
+            <span className="text-[10px] text-ink-400">+{project.tags.length - 4}</span>
+          )}
         </div>
+      </div>
 
-        {/* Links */}
-        {project.links && Object.values(project.links).some(Boolean) && (
-          <div className="flex items-center gap-3 pt-3 border-t border-paper-200">
-            {project.links.github && (
-              <a
-                href={project.links.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-ink-400 hover:text-ink-700 transition-colors"
-              >
-                <Github size={11} /> Code
-              </a>
-            )}
-            {project.links.caseStudy && (
-              <a
-                href={project.links.caseStudy}
-                className="inline-flex items-center gap-1 text-xs text-purple-500 hover:text-purple-700 font-medium transition-colors group/link"
-              >
-                <FileText size={11} />
-                Case study
-                <ArrowUpRight size={10} className="group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
-              </a>
-            )}
-          </div>
-        )}
+      {/* CTA arrow */}
+      <div className="shrink-0 flex items-center justify-center w-8 h-8 rounded-xl bg-paper-200 text-ink-400 group-hover:bg-purple-50 group-hover:text-purple-500 transition-all duration-200">
+        <ChevronRight size={15} />
       </div>
     </motion.article>
   );
 }
 
+/* ── Main Projects section ──────────────────────────────────────────── */
 export function Projects() {
-  const [activeCategory, setActiveCategory] = useState<ProjectCategory | 'All'>('All');
-
-  const filtered =
-    activeCategory === 'All'
-      ? projects
-      : projects.filter((p) => p.category === activeCategory);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   return (
-    <SectionWrapper id="projects" background="paper" withDivider>
-      <SectionHeading
-        eyebrow="Selected work"
-        heading={<>Projects that <UnderlineAccent color="amber">actually shipped</UnderlineAccent></>}
-        subheading="Production systems serving real businesses — not side projects or demos."
-        className="mb-8"
-      />
+    <>
+      <SectionWrapper id="projects" background="paper" withDivider>
+        <SectionHeading
+          eyebrow="Selected work"
+          heading={<>Projects that <UnderlineAccent color="amber">actually shipped</UnderlineAccent></>}
+          subheading="Production systems serving real businesses. Click any project to see the full picture."
+          className="mb-10"
+        />
 
-      {/* Filter tabs */}
-      <div className="flex flex-wrap items-center gap-2 mb-8">
-        {ALL_CATEGORIES.map(({ label, value }) => (
-          <motion.button
-            key={value}
-            onClick={() => setActiveCategory(value)}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className={cn(
-              'px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200',
-              activeCategory === value
-                ? 'bg-ink-900 text-white shadow-soft'
-                : 'bg-white border border-ink-200 text-ink-500 hover:border-ink-300 hover:text-ink-700'
-            )}
-          >
-            {label}
-          </motion.button>
-        ))}
-      </div>
-
-      {/* Project grid */}
-      <AnimatePresence mode="popLayout">
-        <motion.div
-          key={activeCategory}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
-        >
-          {filtered.map((project, i) => (
-            <ProjectCard key={project.id} project={project} index={i} />
+        {/* Vertical list */}
+        <div className="flex flex-col gap-3">
+          {projects.map((project, i) => (
+            <ProjectRow
+              key={project.id}
+              project={project}
+              index={i}
+              onOpen={setSelectedProject}
+            />
           ))}
-        </motion.div>
-      </AnimatePresence>
-    </SectionWrapper>
+        </div>
+
+        {/* Footer note */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4 }}
+          className="mt-8 text-center text-xs text-ink-300"
+        >
+          Click any project to see full details, architecture, and outcomes
+        </motion.p>
+      </SectionWrapper>
+
+      {/* Modal portal */}
+      {selectedProject && (
+        <ProjectModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
+    </>
   );
 }

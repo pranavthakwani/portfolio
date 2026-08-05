@@ -52,7 +52,7 @@ export function SectionHeading({
 
       <h2
         className={cn(
-          'text-display-md font-bold text-ink-900 leading-[1.15] tracking-tight',
+          'font-accent text-display-md font-bold text-ink-900 leading-[1.1] tracking-tight',
           align === 'center' ? 'max-w-2xl' : 'max-w-xl'
         )}
       >

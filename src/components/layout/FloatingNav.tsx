@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils/cn';
 
 const NAV_ITEMS = [
   { label: 'Home',       id: 'home' },
+  { label: 'Chat',       id: 'chat' },
   { label: 'Projects',   id: 'projects' },
   { label: 'Experience', id: 'experience' },
   { label: 'Skills',     id: 'skills' },
@@ -19,17 +20,15 @@ const SECTION_IDS = NAV_ITEMS.map((item) => item.id);
 
 function scrollTo(id: string) {
   const el = document.getElementById(id);
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-/* ── Desktop floating nav (left side) ──────────────────────────────── */
+/* ── Desktop floating nav (left side, glass morphism) ──────────────── */
 function DesktopNav({ activeId }: { activeId: string }) {
   return (
     <nav
       aria-label="Page sections"
-      className="fixed left-8 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-1"
+      className="fixed left-5 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-0.5 glass-card px-4 py-4 rounded-2xl"
     >
       {NAV_ITEMS.map((item) => {
         const isActive = activeId === item.id;
@@ -38,10 +37,7 @@ function DesktopNav({ activeId }: { activeId: string }) {
           <motion.button
             key={item.id}
             onClick={() => scrollTo(item.id)}
-            className={cn(
-              'relative group flex items-center gap-3 text-left py-1 cursor-pointer',
-              'transition-all duration-300 ease-out'
-            )}
+            className="relative group flex items-center gap-3 text-left py-1 cursor-pointer transition-all duration-300 ease-out"
             whileHover="hovered"
             animate={isActive ? 'active' : 'idle'}
           >
@@ -58,18 +54,18 @@ function DesktopNav({ activeId }: { activeId: string }) {
 
             {/* Label */}
             <motion.span
-              className="font-medium text-ink-400 leading-none tracking-[-0.01em] select-none"
+              className="font-medium leading-none tracking-[-0.01em] select-none"
               variants={{
-                idle:    { opacity: 0.45, fontSize: '0.8125rem', x: 0, color: '#7E7E90' },
-                active:  { opacity: 1,    fontSize: '0.875rem',  x: 2,  color: '#1A1919' },
-                hovered: { opacity: 0.85, fontSize: '0.875rem',  x: 2,  color: '#1A1919' },
+                idle:    { opacity: 0.4,  fontSize: '0.8rem',    x: 0, color: '#94A3B8' },
+                active:  { opacity: 1,    fontSize: '0.875rem',  x: 2, color: '#0F172A' },
+                hovered: { opacity: 0.8,  fontSize: '0.875rem',  x: 2, color: '#0F172A' },
               }}
               transition={{ duration: 0.22, ease: 'easeOut' }}
             >
               {item.label}
             </motion.span>
 
-            {/* Active underline (hand-drawn feel via SVG) */}
+            {/* Active underline — confident single-sweep */}
             <AnimatePresence>
               {isActive && (
                 <motion.span
@@ -78,13 +74,13 @@ function DesktopNav({ activeId }: { activeId: string }) {
                   exit={{ scaleX: 0, opacity: 0 }}
                   style={{ originX: 0 }}
                   className="absolute bottom-0 left-7 right-0 pointer-events-none"
-                  transition={{ duration: 0.25, ease: 'easeOut' }}
+                  transition={{ duration: 0.28, ease: 'easeOut' }}
                 >
-                  <svg viewBox="0 0 80 4" className="w-full" preserveAspectRatio="none" fill="none">
+                  <svg viewBox="0 0 80 5" className="w-full" preserveAspectRatio="none" fill="none">
                     <path
-                      d="M1,2.5 C15,1 35,3.5 55,2 C65,1.5 72,3 79,2.5"
-                      stroke="#E07B39"
-                      strokeWidth="2"
+                      d="M1,3.5 C25,1 55,4.5 79,2.5"
+                      stroke="#F97316"
+                      strokeWidth="2.5"
                       strokeLinecap="round"
                     />
                   </svg>
@@ -98,7 +94,7 @@ function DesktopNav({ activeId }: { activeId: string }) {
   );
 }
 
-/* ── Mobile nav (bottom-right floating button + overlay) ───────────── */
+/* ── Mobile nav (bottom-right floating button + frosted glass panel) ── */
 function MobileNav({ activeId }: { activeId: string }) {
   const [open, setOpen] = useState(false);
 
@@ -108,7 +104,7 @@ function MobileNav({ activeId }: { activeId: string }) {
       <motion.button
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? 'Close menu' : 'Open menu'}
-        className="fixed bottom-6 right-6 z-50 lg:hidden flex items-center justify-center w-12 h-12 rounded-full bg-white shadow-soft-lg border border-ink-100 text-ink-700"
+        className="fixed bottom-6 right-6 z-50 lg:hidden flex items-center justify-center w-12 h-12 rounded-full glass-card text-ink-700"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
@@ -135,7 +131,7 @@ function MobileNav({ activeId }: { activeId: string }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setOpen(false)}
-              className="fixed inset-0 z-40 bg-ink-950/40 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-40 bg-ink-950/30 backdrop-blur-sm lg:hidden"
             />
             <motion.nav
               key="panel"
@@ -143,7 +139,7 @@ function MobileNav({ activeId }: { activeId: string }) {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '100%', opacity: 0 }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="fixed right-0 top-0 bottom-0 z-50 w-64 bg-white shadow-soft-xl flex flex-col justify-center px-8 gap-1 lg:hidden"
+              className="fixed right-0 top-0 bottom-0 z-50 w-64 glass-panel flex flex-col justify-center px-8 gap-1 lg:hidden"
               aria-label="Mobile navigation"
             >
               <p className="mb-6 text-xs font-semibold uppercase tracking-[0.12em] text-ink-300">
@@ -178,7 +174,6 @@ function MobileNav({ activeId }: { activeId: string }) {
   );
 }
 
-/* ── Combined nav export ────────────────────────────────────────────── */
 export function FloatingNav() {
   const activeId = useActiveSection(SECTION_IDS);
 

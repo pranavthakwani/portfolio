@@ -1,58 +1,53 @@
 import type { ExperienceItem } from '@/types';
 
-/**
- * Career history — replace with your real experience.
- * Write highlights as concrete outcomes, not job-description-style duties.
- */
 export const experience: ExperienceItem[] = [
   {
-    id: 'exp-1',
-    role: 'Senior AI Automation Engineer',
-    company: '[Current Company]', // ← replace
-    companyType: 'Enterprise AI consultancy',
-    period: '2024 – Present',
+    id: 'exp-techgrind',
+    role: 'Junior Software Developer — AI & Automation',
+    company: 'Tech Grind Pvt. Ltd.',
+    companyType: 'AI & software product company · Ahmedabad, On-site',
+    period: 'Jul 2025 – Present',
     current: true,
     summary:
-      'Lead engineer on all AI/LLM integration and automation workstreams. Own the end-to-end architecture of production RAG systems and multi-agent pipelines for enterprise clients across SaaS, finance, and legal sectors.',
+      'Own the full AI and automation workstream — from event-driven lead intake across WhatsApp and CRM to self-hosted RAG pipelines serving multilingual customers. Every system I ship here has a measurable time-saved or effort-reduced outcome.',
     highlights: [
-      'Architected and shipped 3 production RAG systems now serving 10k+ daily queries',
-      'Built the LangGraph invoice automation pipeline — 85% manual effort reduction',
-      'Introduced MCP-based tool integrations; reduced CRM time-to-insight from 25 min to 45 sec',
-      'Established internal AI engineering standards and code review practices',
+      'Replaced manual lead sorting with an event-driven WhatsApp-to-CRM workflow using LLM intent classification',
+      'Automated MIS reporting with validation and exception handling — saving 150–200 hours per month',
+      'Built a multi-agent WhatsApp platform with role-based conversation routing for support and sales',
+      'Deployed a self-hosted RAG pipeline (Qwen2.5 via Ollama) keeping multilingual response times under 5 seconds',
+      'Led a product-research automation effort that cut manual research effort by ~85%',
     ],
-    tags: ['RAG', 'LangGraph', 'MCP', 'LLM', 'FastAPI', 'Python'],
+    tags: ['n8n', 'LangChain', 'FAISS', 'Ollama', 'Node.js', 'FastAPI', 'RAG', 'WhatsApp API'],
   },
   {
-    id: 'exp-2',
-    role: 'LLM Integration Specialist',
-    company: '[Previous Company]', // ← replace
-    companyType: 'Series B SaaS startup',
-    period: '2022 – 2024',
+    id: 'exp-redsand',
+    role: 'Full-Stack SDE Intern',
+    company: 'RedSand Technology',
+    companyType: 'Tech company · Dubai, UAE — Remote',
+    period: 'Feb 2025 – May 2025',
     current: false,
     summary:
-      'Built the company\'s first AI layer on top of an existing SaaS product — including a customer-facing chatbot, internal knowledge base, and automated customer onboarding pipeline.',
+      'Delivered frontend features for salary analysis and property inspection dashboards, shipped a WhatsApp chatbot that automated 80% of customer support queries, and built a LinkedIn data enrichment pipeline for the sales team.',
     highlights: [
-      'Reduced onboarding time from 5 days to same-day with an AI-guided setup workflow',
-      'Deployed a support RAG system handling 60% of Tier-1 tickets without human intervention',
-      'Integrated OpenAI function-calling with our REST API; shipped to production in 6 weeks',
-      'Grew from 0 to 3 AI engineers by scoping and hiring the initial team',
+      'Owned frontend delivery for salary analysis and property inspection dashboards with role-based access control',
+      'Automated ~80% of customer queries by building a WhatsApp chatbot integrated into existing support workflows',
+      'Built a data enrichment pipeline that turned raw LinkedIn data into structured company and contact insights',
     ],
-    tags: ['OpenAI', 'LangChain', 'Node.js', 'TypeScript', 'PostgreSQL', 'n8n'],
+    tags: ['React', 'Node.js', 'WhatsApp API', 'Data Enrichment', 'Dashboard'],
   },
   {
-    id: 'exp-3',
-    role: 'Backend Engineer',
-    company: '[Earlier Company]', // ← replace
-    companyType: 'Product startup',
-    period: '2020 – 2022',
+    id: 'exp-baskethunt',
+    role: 'Web Developer Intern',
+    company: 'BasketHunt Pvt. Ltd.',
+    companyType: 'E-commerce startup · Gurugram — Remote',
+    period: 'Jul 2023 – Sep 2023',
     current: false,
     summary:
-      'Backend engineer on a data-heavy consumer product. Responsible for API design, performance optimisation, and early exploration of ML features.',
+      'Improved operational efficiency by integrating Zoho and Odoo, and managed user provisioning through Google Admin.',
     highlights: [
-      'Reduced core API p99 latency by 60% through query optimisation and caching strategy',
-      'Built the first recommendation engine using collaborative filtering (scikit-learn)',
-      'Migrated monolith to service-oriented architecture; zero-downtime cutover',
+      'Improved operational efficiency by 15% by integrating Zoho and Odoo',
+      'Managed user provisioning and access control through Google Admin',
     ],
-    tags: ['Python', 'FastAPI', 'Redis', 'PostgreSQL', 'Docker', 'scikit-learn'],
+    tags: ['Zoho', 'Odoo', 'Google Admin', 'Integration', 'Web Development'],
   },
 ];

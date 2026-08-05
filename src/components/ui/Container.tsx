@@ -11,14 +11,10 @@ const sizeClasses: Record<NonNullable<ContainerProps['size']>, string> = {
   sm:   'max-w-2xl',
   md:   'max-w-4xl',
   lg:   'max-w-6xl',
-  xl:   'max-w-7xl',
+  xl:   'max-w-screen-xl',   // 1280px — fills the screen properly
   full: 'max-w-none',
 };
 
-/**
- * Page-level width container with horizontal padding.
- * All sections use this as their outermost content wrapper.
- */
 export function Container({
   children,
   className,
@@ -28,7 +24,7 @@ export function Container({
   return (
     <Tag
       className={cn(
-        'mx-auto w-full px-6 sm:px-8 lg:px-12',
+        'mx-auto w-full px-6 sm:px-10 lg:px-16',
         sizeClasses[size],
         className
       )}

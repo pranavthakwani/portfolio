@@ -1,84 +1,84 @@
 import type { Project } from '@/types';
 
-/**
- * Portfolio projects — replace with your real work.
- * Structure your projects to lead with business outcome, not tech stack.
- * The AI assistant references this data when answering project questions.
- */
 export const projects: Project[] = [
   {
-    id: 'enterprise-rag',
-    title: 'Enterprise RAG Knowledge Base',
-    tagline: 'Multi-source retrieval system for a SaaS support team',
+    id: 'ai-lead-qualification',
+    title: 'AI Lead Qualification & Sales Automation',
+    tagline: 'Event-driven WhatsApp-to-CRM pipeline with LLM intent classification',
     description:
-      'Designed and deployed a production RAG pipeline that indexes internal documentation, Confluence wikis, Slack threads, and Zendesk tickets. The system answers support queries using a hybrid BM25 + semantic search strategy with automatic re-ranking and hallucination guardrails.',
-    outcome: '40% reduction in Tier-1 support tickets; average resolution time down from 18 min to 4 min.',
-    architectureHighlight: 'Hybrid BM25 + dense retrieval · Cohere re-ranking · LangChain + FastAPI backend',
-    tags: ['RAG', 'LangChain', 'FastAPI', 'Pinecone', 'Python', 'OpenAI'],
+      'Implemented an end-to-end lead intake system triggered by WhatsApp webhooks. Incoming messages are classified for intent using an LLM, key entities are extracted via structured prompting, and qualified leads are synced to the CRM through REST API calls — all without manual sorting.',
+    outcome: 'Replaced 100% of manual lead sorting. Sales team focuses on closing, not triaging.',
+    architectureHighlight: 'n8n · WhatsApp Webhooks · LLM intent classification · REST CRM sync',
+    tags: ['n8n', 'JavaScript', 'WhatsApp API', 'LLM', 'CRM', 'Webhooks'],
+    category: 'Automation',
+    featured: true,
+    links: {},
+  },
+  {
+    id: 'business-ops-automation',
+    title: 'Business Operations Automation Platform',
+    tagline: 'MIS reporting automation saving 150–200 hours per month',
+    description:
+      'Built a scheduled automation platform using Cron jobs and REST APIs to validate, transform, and sync MIS datasets between source spreadsheets and reporting systems. Includes exception handling and validation rules that catch data quality issues before they reach reports.',
+    outcome: 'Saved 150–200 hours per month of manual data entry and report preparation.',
+    architectureHighlight: 'n8n · Cron Jobs · REST APIs · validation pipelines',
+    tags: ['n8n', 'Cron Jobs', 'REST APIs', 'Data Automation', 'MIS'],
+    category: 'Automation',
+    featured: true,
+    links: {},
+  },
+  {
+    id: 'enterprise-rag-assistant',
+    title: 'Enterprise AI Knowledge Assistant',
+    tagline: 'Self-hosted multilingual RAG pipeline — responses under 5 seconds',
+    description:
+      'Built a FastAPI retrieval service on LangChain and FAISS implementing document chunking, vector indexing, and a self-hosted retrieval pipeline using Qwen2.5 via Ollama. The system streams multilingual responses with source attribution, cutting reliance on external APIs entirely.',
+    outcome: 'Multilingual internal Q&A under 5 seconds. Zero external API dependency in production.',
+    architectureHighlight: 'Python · LangChain · FAISS · Qwen2.5 (Ollama) · FastAPI · streaming',
+    tags: ['Python', 'LangChain', 'FAISS', 'RAG', 'Ollama', 'FastAPI', 'Self-hosted'],
     category: 'RAG',
     featured: true,
-    links: {
-      caseStudy: '#',
-    },
+    links: {},
   },
   {
-    id: 'agent-invoice-automation',
-    title: 'AI Agent Invoice Processing Pipeline',
-    tagline: 'Autonomous multi-agent system for finance automation',
+    id: 'whatsapp-business-platform',
+    title: 'WhatsApp Business Operations Platform',
+    tagline: 'Multi-agent platform with role-based routing and real-time dashboards',
     description:
-      'Built a LangGraph-orchestrated multi-agent workflow that extracts structured data from unstructured invoices (PDF, scan, email), validates against ERP records, flags anomalies, and routes exceptions to a human-in-the-loop review queue. Agents include a document parser, a validation agent, an anomaly detector, and an audit logger.',
-    outcome: 'Processes 2,000+ invoices/day with 98.7% accuracy. Reduced manual processing effort by 85%.',
-    architectureHighlight: 'LangGraph state machine · tool-calling agents · human-in-the-loop checkpoints',
-    tags: ['LangGraph', 'Multi-agent', 'FastAPI', 'Python', 'PostgreSQL', 'OCR'],
+      'Architected a multi-agent WhatsApp operations platform with persistent conversation state, role-based routing between support and sales agents, and real-time dashboards for team visibility. Automated 80% of customer queries, leaving only complex cases for humans.',
+    outcome: '80% of customer queries handled automatically. Support and sales share a single view.',
+    architectureHighlight: 'Node.js · React · multi-agent routing · persistent state · real-time dashboards',
+    tags: ['Node.js', 'React', 'Multi-agent', 'WhatsApp', 'Real-time'],
     category: 'Agent',
     featured: true,
-    links: {
-      caseStudy: '#',
-    },
+    links: {},
   },
   {
-    id: 'mcp-crm-integration',
-    title: 'LLM–CRM MCP Server',
-    tagline: 'Model Context Protocol server bridging Claude and Salesforce',
+    id: 'product-intelligence-platform',
+    title: 'AI Product Intelligence Platform',
+    tagline: 'Distributed crawling pipeline — 85% research effort eliminated',
     description:
-      'Developed an MCP server that exposes Salesforce data, workflows, and SOQL queries as structured tools consumable by Claude. Sales reps can ask natural-language questions about their pipeline, trigger follow-up sequences, and get AI-generated deal summaries — all from within their existing chat interface.',
-    outcome: 'Adopted by a 150-person sales team. Deal summary generation time: from 25 min manual to 45 sec AI.',
-    architectureHighlight: 'MCP protocol · Salesforce REST API · Claude tool-use · OAuth 2.0',
-    tags: ['MCP', 'Claude', 'Salesforce', 'TypeScript', 'Node.js', 'OAuth'],
-    category: 'Integration',
-    featured: true,
-    links: {
-      caseStudy: '#',
-    },
-  },
-  {
-    id: 'document-intelligence',
-    title: 'Document Intelligence Platform',
-    tagline: 'PDF extraction, classification and intelligent routing',
-    description:
-      'End-to-end pipeline that ingests documents from email, S3, and FTP; classifies document type and urgency; extracts structured data using a combination of layout-aware models and LLM prompting; and routes outputs to the correct downstream system with full audit trail.',
-    outcome: 'Automated 92% of previously manual document handling for a legal services firm.',
-    architectureHighlight: 'Layout-aware extraction · LLM classification · n8n orchestration · Redis queue',
-    tags: ['Python', 'n8n', 'OpenAI', 'AWS S3', 'Redis', 'FastAPI'],
+      'Developed a distributed crawling pipeline using Playwright, a Bull job queue, and Redis to parallelise data collection and normalise product data across worker pools. The system automated the entire product research workflow, freeing the team to focus on analysis rather than collection.',
+    outcome: '~85% reduction in manual research effort across the product team.',
+    architectureHighlight: 'Playwright · Node.js · Bull Queue · Redis · distributed workers',
+    tags: ['Playwright', 'Node.js', 'Bull Queue', 'Redis', 'Web Scraping'],
     category: 'Automation',
     featured: false,
-    links: {
-      caseStudy: '#',
-    },
+    links: {},
   },
   {
     id: 'this-portfolio',
     title: 'This Portfolio',
-    tagline: 'Production-grade RAG portfolio — the proof is the product',
+    tagline: 'Live AI assistant as proof of work — not a description of it',
     description:
-      'The website you\'re on right now. A Next.js application featuring a live RAG-powered AI assistant that answers questions about my work, architecture, and experience using a strictly grounded knowledge base. Built to demonstrate, not describe, my AI engineering capabilities.',
-    outcome: 'You\'re using it right now. Ask the assistant anything.',
-    architectureHighlight: 'Next.js App Router · Framer Motion · ChatService abstraction · streaming responses',
+      "The website you're on right now. A Next.js application with a streaming AI assistant built on a ChatService abstraction layer that can swap mock responses for a real RAG backend with a single import change. The site itself is the demonstration.",
+    outcome: "You're using it right now. Ask the assistant anything about my work.",
+    architectureHighlight: 'Next.js 14 App Router · Framer Motion · ChatService abstraction · streaming',
     tags: ['Next.js', 'TypeScript', 'Framer Motion', 'RAG', 'Tailwind CSS'],
     category: 'Portfolio',
     featured: false,
     links: {
-      github: 'https://github.com/pranav/portfolio', // ← replace
+      github: 'https://github.com/pranavthakwani/portfolio',
     },
   },
 ];

@@ -4,29 +4,30 @@ import { cn } from '@/lib/utils/cn';
 
 /* ─── AccentMark ──────────────────────────────────────────────────────
    Hand-drawn SVG accent marks inspired by Odoo's editorial style.
-   Used sparingly on 1-2 words per heading to add personality.
+   Drawn with confidence — single strokes, like a marker swipe.
 
    Available marks:
-   - UnderlineAccent — wavy underline stroke (amber/teal/purple)
-   - HighlightAccent — irregular highlight behind text (amber)
-   - CircleAccent    — hand-drawn oval around text (teal/purple)
-   ──────────────────────────────────────────────────────────────── */
+   - UnderlineAccent  — confident single-sweep marker underline
+   - HighlightAccent  — thick semi-transparent marker highlight behind text
+   - CircleAccent     — hand-drawn oval around text
+   - ArrowAccent      — curved directional arrow
+   ──────────────────────────────────────────────────────────────────── */
 
 type AccentColor = 'amber' | 'teal' | 'purple';
 
-const colorClasses: Record<AccentColor, string> = {
+const strokeClasses: Record<AccentColor, string> = {
   amber:  'text-amber-500',
   teal:   'text-teal-500',
   purple: 'text-purple-500',
 };
 
-const fillClasses: Record<AccentColor, string> = {
-  amber:  'fill-amber-400/20',
-  teal:   'fill-teal-400/20',
-  purple: 'fill-purple-400/15',
+const highlightFill: Record<AccentColor, string> = {
+  amber:  'rgba(251,146,60,0.32)',   // orange-400 at 32% — warm highlighter
+  teal:   'rgba(52,211,153,0.28)',   // emerald-400 at 28%
+  purple: 'rgba(129,140,248,0.25)', // indigo-400 at 25%
 };
 
-/* ── Wavy underline under the word ─────────────────────────────────── */
+/* ── Confident marker underline — single smooth sweep ───────────────── */
 export function UnderlineAccent({
   children,
   color = 'amber',
@@ -41,16 +42,29 @@ export function UnderlineAccent({
       {children}
       <svg
         aria-hidden="true"
-        className={cn('absolute -bottom-1 left-0 w-full overflow-visible pointer-events-none', colorClasses[color])}
-        viewBox="0 0 200 10"
+        className={cn(
+          'absolute -bottom-1.5 left-0 w-full pointer-events-none overflow-visible',
+          strokeClasses[color]
+        )}
+        viewBox="0 0 200 12"
         preserveAspectRatio="none"
         fill="none"
       >
+        {/* Single confident marker sweep — not wavy, not broken */}
         <path
-          d="M2,6 C28,2 55,9 80,6 C105,3 130,9 158,6 C175,4 188,7 198,6"
+          d="M2,9 C50,3 110,11 198,6"
           stroke="currentColor"
-          strokeWidth="2.8"
+          strokeWidth="3.5"
           strokeLinecap="round"
+          vectorEffect="non-scaling-stroke"
+        />
+        {/* Subtle second layer for marker weight feel */}
+        <path
+          d="M3,10 C55,5 115,11 197,7"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeOpacity="0.3"
           vectorEffect="non-scaling-stroke"
         />
       </svg>
@@ -58,7 +72,7 @@ export function UnderlineAccent({
   );
 }
 
-/* ── Orange marker-highlight behind the word ────────────────────────── */
+/* ── Marker highlighter behind text — thick, slightly organic ───────── */
 export function HighlightAccent({
   children,
   color = 'amber',
@@ -68,28 +82,41 @@ export function HighlightAccent({
   color?: AccentColor;
   className?: string;
 }) {
+  const fill = highlightFill[color];
+
   return (
     <span className={cn('relative inline-block', className)}>
-      {/* Highlight box sits behind the text */}
+      {/* Highlighter goes behind the text */}
       <svg
         aria-hidden="true"
-        className={cn(
-          'absolute inset-y-0 -left-1.5 -right-1.5 top-1 pointer-events-none',
-          fillClasses[color],
-          colorClasses[color]
-        )}
+        className="absolute pointer-events-none"
+        style={{
+          top: '5%',
+          left: '-3%',
+          width: '106%',
+          height: '90%',
+        }}
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
-        fill="currentColor"
       >
-        <path d="M4,8 C18,-4 82,2 96,6 C100,40 98,75 96,92 C80,100 18,96 4,92 C0,70 1,35 4,8" />
+        {/* First pass — main body of the highlighter swipe */}
+        <path
+          d="M0,18 C22,12 78,16 100,14 L100,78 C78,82 22,80 0,76 Z"
+          fill={fill}
+        />
+        {/* Second pass — slightly offset for real marker layering feel */}
+        <path
+          d="M2,28 C25,23 75,26 98,24 L97,68 C74,72 26,70 3,66 Z"
+          fill={fill}
+          opacity="0.5"
+        />
       </svg>
       <span className="relative">{children}</span>
     </span>
   );
 }
 
-/* ── Irregular circle around the word ──────────────────────────────── */
+/* ── Hand-drawn circle around text ─────────────────────────────────── */
 export function CircleAccent({
   children,
   color = 'teal',
@@ -104,29 +131,20 @@ export function CircleAccent({
       <svg
         aria-hidden="true"
         className={cn(
-          'absolute -inset-2 pointer-events-none overflow-visible',
-          colorClasses[color]
+          'absolute pointer-events-none overflow-visible',
+          strokeClasses[color]
         )}
+        style={{ inset: '-6px' }}
         viewBox="0 0 100 50"
         preserveAspectRatio="none"
         fill="none"
       >
-        <ellipse
-          cx="50" cy="25" rx="48" ry="22"
-          stroke="currentColor"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-          strokeDasharray="1 0"
-          style={{ paintOrder: 'stroke' }}
-        />
-        {/* Add slight warp using a path instead of pure ellipse for hand-drawn feel */}
         <path
-          d="M4,22 C6,5 35,-3 55,2 C75,7 97,14 97,26 C97,38 78,50 52,50 C26,50 2,42 4,28"
+          d="M6,22 C8,6 38,-2 55,2 C72,6 96,14 96,26 C96,38 76,50 52,50 C28,50 4,42 6,28"
           stroke="currentColor"
-          strokeWidth="2.2"
+          strokeWidth="2.5"
           strokeLinecap="round"
           fill="none"
-          opacity="0.4"
         />
       </svg>
       <span className="relative">{children}</span>
@@ -134,7 +152,7 @@ export function CircleAccent({
   );
 }
 
-/* ── Curved arrow (connects sections or annotates) ──────────────────── */
+/* ── Curved arrow ───────────────────────────────────────────────────── */
 export function ArrowAccent({
   className,
   direction = 'down',
@@ -153,7 +171,7 @@ export function ArrowAccent({
   return (
     <svg
       aria-hidden="true"
-      className={cn('pointer-events-none', colorClasses[color], className)}
+      className={cn('pointer-events-none', strokeClasses[color], className)}
       viewBox="0 0 50 50"
       fill="none"
       stroke="currentColor"

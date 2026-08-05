@@ -1,66 +1,104 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Container } from '@/components/ui/Container';
 import { HeroIntro } from './HeroIntro';
-import { ChatPanel } from '@/components/chat/ChatPanel';
+import { profile } from '@/lib/data/profile';
 
 /**
- * Hero — the most important section of the portfolio.
+ * Hero — full-bleed first impression.
  *
  * Layout:
- * - Desktop (lg+): 35/65 split — HeroIntro left, ChatPanel right
- * - Mobile:        Stack — HeroIntro first (human context), ChatPanel below
+ * - Background (full viewport): a cinematic reveal — the person slides in from the left,
+ *   settling on the right. This represents "Pranav entering the scene."
+ * - Foreground (overlaid, left side): intro text, name, CTA.
  *
- * The HeroIntro establishes human context before the AI chat is presented.
- * This is intentional: on mobile especially, an immediate chatbox without
- * human context risks reading as a generic lead-gen widget.
+ * When a photo exists at /public/pranav.jpg, it fills the right background.
+ * The gradient mask ensures text on the left is always readable.
  */
 export function Hero() {
   return (
     <section
       id="home"
       className="relative min-h-screen flex flex-col overflow-hidden"
+      style={{ backgroundColor: '#FAFAF7' }}
     >
-      {/* Subtle background gradient — not a blob, just a very gentle warmth */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(ellipse 80% 60% at 65% 50%, rgba(102,84,163,0.04) 0%, transparent 70%), radial-gradient(ellipse 50% 50% at 15% 30%, rgba(47,156,142,0.03) 0%, transparent 60%)',
-        }}
-      />
+      {/* ── Background: person walking in from left, stopping at right ─── */}
+      <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
 
-      <Container className="flex-1 flex flex-col">
-        {/* Main split layout */}
-        <div className="flex-1 flex flex-col lg:flex-row lg:items-center gap-12 lg:gap-16 pt-20 pb-16 lg:py-0">
+        {/* Paper grain overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.055]"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E\")",
+            backgroundRepeat: 'repeat',
+            backgroundSize: '400px 400px',
+          }}
+        />
 
-          {/* ── Left column — human intro (35%) ───────────── */}
+        {/* Animated right panel — person slides in from stage-left */}
+        <motion.div
+          className="absolute right-0 top-0 bottom-0 w-[58%]"
+          initial={{ clipPath: 'inset(0 100% 0 0 round 0px)' }}
+          animate={{ clipPath: 'inset(0 0% 0 0 round 0px)' }}
+          transition={{ duration: 1.7, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+        >
+          {/* Ambient gradient blobs */}
           <motion.div
-            className="w-full lg:w-[35%] shrink-0"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
-          >
-            <HeroIntro />
-          </motion.div>
-
-          {/* ── Divider line (desktop only) ──────────────── */}
-          <div
-            aria-hidden="true"
-            className="hidden lg:block w-px self-stretch bg-gradient-to-b from-transparent via-ink-200 to-transparent shrink-0"
+            animate={{ scale: [1, 1.12, 1], opacity: [0.5, 0.8, 0.5] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute top-0 right-0 w-[80%] h-[80%] bg-purple-100/60 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{ scale: [1.1, 1, 1.1], opacity: [0.3, 0.55, 0.3] }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+            className="absolute bottom-0 right-1/4 w-[60%] h-[60%] bg-amber-100/50 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{ scale: [1, 1.08, 1], opacity: [0.4, 0.6, 0.4] }}
+            transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+            className="absolute top-1/3 right-1/3 w-[50%] h-[50%] bg-teal-100/40 rounded-full blur-3xl"
           />
 
-          {/* ── Right column — live AI assistant (65%) ────── */}
-          <motion.div
-            className="w-full lg:flex-1 min-h-[520px] lg:min-h-[640px]"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-          >
-            <ChatPanel />
-          </motion.div>
+          {/* Photo — fills the right panel when it exists */}
+          <div className="absolute inset-0 flex items-end justify-center lg:justify-end lg:pr-8">
+            <div className="relative w-full max-w-lg h-[90%] rounded-tl-[2.5rem] overflow-hidden">
+              <Image
+                src={profile.photo}
+                alt={profile.name}
+                fill
+                className="object-cover object-top"
+                sizes="(max-width: 1280px) 50vw, 600px"
+                priority
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.opacity = '0';
+                }}
+              />
+              {/* Fallback initials when no photo */}
+              <div className="absolute inset-0 flex items-center justify-center select-none">
+                <span
+                  className="font-extrabold text-[12rem] leading-none text-purple-200/50 font-sans"
+                  aria-hidden="true"
+                >
+                  PT
+                </span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Left gradient mask — ensures text readability over the background */}
+        <div className="absolute inset-y-0 left-0 w-[65%] bg-gradient-to-r from-[#FAFAF7] via-[#FAFAF7]/95 to-transparent" />
+        {/* Bottom gradient */}
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#FAFAF7]/60 to-transparent" />
+      </div>
+
+      {/* ── Foreground: intro text — overlaid on the left ────────────── */}
+      <Container className="relative z-10 flex-1 flex flex-col justify-center py-20 lg:py-0">
+        <div className="w-full max-w-xl lg:max-w-2xl">
+          <HeroIntro />
         </div>
       </Container>
     </section>
