@@ -12,7 +12,7 @@ interface SectionWrapperProps {
 }
 
 const backgrounds: Record<NonNullable<SectionWrapperProps['background']>, string> = {
-  white:        'bg-paper-50',    // warm near-white, not stark pure white
+  white:        'bg-white',        // true white — contrasts clearly against cream body
   paper:        'bg-paper-100',   // warm cream
   'paper-dark': 'bg-paper-200',   // slightly deeper cream
   none:         '',

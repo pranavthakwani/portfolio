@@ -40,7 +40,7 @@ function SkillPill({ skill }: { skill: Skill }) {
             )}
           />
         ))}
-        <span className="ml-1 text-[10px] text-ink-300">{level.label}</span>
+        <span className="ml-1 text-[10px] text-ink-500 font-medium">{level.label}</span>
       </div>
 
       {/* Tooltip note on hover */}
@@ -76,7 +76,7 @@ export function Skills() {
             {/* Category header */}
             <div className="mb-4">
               <h3 className="text-sm font-bold text-ink-900 mb-1">{category.name}</h3>
-              <p className="text-xs text-ink-400">{category.description}</p>
+              <p className="text-xs text-ink-600">{category.description}</p>
             </div>
 
             {/* Skill pills */}
@@ -97,7 +97,7 @@ export function Skills() {
         transition={{ duration: 0.4, delay: 0.3 }}
         className="mt-10 flex items-center gap-6"
       >
-        <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-300">Level key:</span>
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-500">Level key:</span>
         {Object.entries(levelConfig).map(([key, { label, dotCount, color }]) => (
           <div key={key} className="flex items-center gap-1.5">
             <div className="flex gap-1">
@@ -105,7 +105,7 @@ export function Skills() {
                 <span key={d} className={cn('w-1.5 h-1.5 rounded-full', d <= dotCount ? color : 'bg-ink-100')} />
               ))}
             </div>
-            <span className="text-[10px] text-ink-400">{label}</span>
+            <span className="text-[10px] text-ink-600 font-medium">{label}</span>
           </div>
         ))}
       </motion.div>

@@ -64,24 +64,24 @@ export function Experience() {
                         <Badge variant="purple" size="sm">Current</Badge>
                       )}
                     </div>
-                    <p className="text-xs text-ink-500">
+                    <p className="text-xs text-ink-600 font-medium">
                       {exp.company}
-                      <span className="mx-1.5 text-ink-300">·</span>
+                      <span className="mx-1.5 text-ink-400">·</span>
                       {exp.companyType}
                     </p>
                   </div>
-                  <span className="shrink-0 text-xs font-medium text-ink-400 bg-paper-200 px-3 py-1 rounded-full">
+                  <span className="shrink-0 text-xs font-semibold text-ink-600 bg-paper-200 px-3 py-1 rounded-full">
                     {exp.period}
                   </span>
                 </div>
 
                 {/* Summary */}
-                <p className="text-xs text-ink-500 leading-relaxed mb-4">{exp.summary}</p>
+                <p className="text-xs text-ink-700 leading-relaxed mb-4">{exp.summary}</p>
 
                 {/* Highlights */}
                 <ul className="space-y-2 mb-4">
                   {exp.highlights.map((h, hi) => (
-                    <li key={hi} className="flex items-start gap-2 text-xs text-ink-600">
+                    <li key={hi} className="flex items-start gap-2 text-xs text-ink-700">
                       <span className="shrink-0 mt-1 w-1.5 h-1.5 rounded-full bg-teal-400" />
                       {h}
                     </li>

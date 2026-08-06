@@ -16,7 +16,24 @@
       "Bash(command -v bun)",
       "Bash(yarn --version)",
       "Bash(yarn install:*)",
-      "Bash(yarn next:*)"
+      "Bash(yarn next:*)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /PID 18792 /F)",
+      "Bash(cmd /c \"taskkill /PID 18792 /F\")",
+      "Bash(yarn tsc:*)",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(cmd /c \"taskkill /IM node.exe /F\")",
+      "Bash(cmd /c \"for /f \\\\\"tokens=5\\\\\" %a in \\('netstat -aon ^| findstr :3000 ^| findstr LISTENING'\\) do taskkill /PID %a /F\")",
+      "Bash(cmd /c \"for /f \\\\\"tokens=5\\\\\" %a in \\('netstat -aon ^| findstr :3001 ^| findstr LISTENING'\\) do taskkill /PID %a /F\")",
+      "Bash(cmd /c \"tasklist | findstr node\")",
+      "Bash(cmd /c \"netstat -aon | findstr :3000\")",
+      "Bash(cmd /c \"netstat -aon | findstr :3001\")",
+      "Bash(cmd /c \"del /F /Q C:\\\\Users\\\\prana\\\\OneDrive\\\\Desktop\\\\portfolio\\\\.next\\\\trace\")",
+      "Bash(cmd /c \"netstat -aon | findstr \\\\\"3000 3001 3002 3003\\\\\"\")",
+      "Bash(cmd /c \"del /F /Q .next\\\\trace 2>nul\")",
+      "Bash(powershell -Command \"Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force; Write-Host 'done'\")",
+      "Bash(powershell -Command \"Get-NetTCPConnection -LocalPort 3000,3001,3002,3003,3004 -ErrorAction SilentlyContinue | Select-Object LocalPort,State,OwningProcess\")",
+      "Bash(cmd /c \"dir C:\\\\Users\\\\prana\\\\OneDrive\\\\Desktop\\\\portfolio\\\\public\")"
     ]
   }
 }

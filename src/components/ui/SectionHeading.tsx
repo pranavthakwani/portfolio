@@ -44,9 +44,11 @@ export function SectionHeading({
       )}
     >
       {eyebrow && (
-        <span className="mb-3 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-purple-500">
-          <span className="h-px w-5 bg-purple-400 rounded-full" />
+        <span className="mb-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-purple-700">
+          {/* Bold coloured line — more visible than a hairline */}
+          <span className="h-[3px] w-7 bg-amber-400 rounded-full" />
           {eyebrow}
+          <span className="h-[3px] w-4 bg-teal-400 rounded-full opacity-60" />
         </span>
       )}
 
@@ -62,7 +64,7 @@ export function SectionHeading({
       {subheading && (
         <p
           className={cn(
-            'mt-4 text-base text-ink-500 leading-relaxed',
+            'mt-4 text-base text-ink-700 leading-relaxed',
             align === 'center' ? 'max-w-xl' : 'max-w-lg'
           )}
         >

@@ -24,7 +24,7 @@ export function Container({
   return (
     <Tag
       className={cn(
-        'mx-auto w-full px-6 sm:px-10 lg:pl-48 lg:pr-14',
+        'mx-auto w-full px-6 sm:px-10 lg:pl-16 lg:pr-14',
         sizeClasses[size],
         className
       )}

@@ -35,7 +35,7 @@ export function About() {
             className="flex flex-col gap-4"
           >
             {profile.bio.map((para, i) => (
-              <p key={i} className="text-sm text-ink-500 leading-relaxed">
+              <p key={i} className="text-sm text-ink-700 leading-relaxed">
                 {para}
               </p>
             ))}
@@ -57,7 +57,7 @@ export function About() {
                 <span className="block font-accent text-3xl font-bold text-ink-900 mb-0.5">
                   {value}
                 </span>
-                <span className="text-xs text-ink-400 font-medium">{label}</span>
+                <span className="text-xs text-ink-600 font-semibold">{label}</span>
               </div>
             ))}
           </motion.div>

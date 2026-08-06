@@ -6,15 +6,16 @@ import { X, Menu } from 'lucide-react';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { cn } from '@/lib/utils/cn';
 
+// Each item gets its own vibrant highlighter colour — Odoo-style personality
 const NAV_ITEMS = [
-  { label: 'Home',       id: 'home' },
-  { label: 'Chat',       id: 'chat' },
-  { label: 'Projects',   id: 'projects' },
-  { label: 'Experience', id: 'experience' },
-  { label: 'Skills',     id: 'skills' },
-  { label: 'About',      id: 'about' },
-  { label: 'Contact',    id: 'contact' },
-] as const;
+  { label: 'Home',       id: 'home',       hl: 'rgba(251,191,36,0.65)'  },  // amber
+  { label: 'Chat',       id: 'chat',       hl: 'rgba(96,165,250,0.60)'  },  // blue
+  { label: 'Projects',   id: 'projects',   hl: 'rgba(52,211,153,0.60)'  },  // green
+  { label: 'Experience', id: 'experience', hl: 'rgba(251,191,36,0.65)'  },  // amber
+  { label: 'Skills',     id: 'skills',     hl: 'rgba(249,115,22,0.55)'  },  // orange
+  { label: 'About',      id: 'about',      hl: 'rgba(167,139,250,0.65)' },  // purple
+  { label: 'Contact',    id: 'contact',    hl: 'rgba(52,211,153,0.60)'  },  // green
+];
 
 const SECTION_IDS = NAV_ITEMS.map((item) => item.id);
 
@@ -28,7 +29,7 @@ function DesktopNav({ activeId }: { activeId: string }) {
   return (
     <nav
       aria-label="Page sections"
-      className="fixed left-5 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-0.5 glass-card px-4 py-4 rounded-2xl"
+      className="fixed left-5 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-3.5 px-3 py-2"
     >
       {NAV_ITEMS.map((item) => {
         const isActive = activeId === item.id;
@@ -37,56 +38,48 @@ function DesktopNav({ activeId }: { activeId: string }) {
           <motion.button
             key={item.id}
             onClick={() => scrollTo(item.id)}
-            className="relative group flex items-center gap-3 text-left py-1 cursor-pointer transition-all duration-300 ease-out"
+            className="relative group flex items-center gap-3 text-left py-0.5 cursor-pointer transition-all duration-300 ease-out"
             whileHover="hovered"
             animate={isActive ? 'active' : 'idle'}
           >
-            {/* Indicator dot */}
+            {/* Indicator dot — uses each item's own colour */}
             <motion.span
-              className="block shrink-0 rounded-full bg-purple-500"
+              className="block shrink-0 rounded-full"
+              style={{ background: item.hl.replace(/[\d.]+\)$/, '1)') }}
               variants={{
-                idle:    { width: 4, height: 4, opacity: 0.3 },
-                active:  { width: 6, height: 6, opacity: 1 },
-                hovered: { width: 6, height: 6, opacity: 0.7 },
+                idle:    { width: 4,  height: 4,  opacity: 0.25 },
+                active:  { width: 7,  height: 7,  opacity: 1    },
+                hovered: { width: 6,  height: 6,  opacity: 0.7  },
               }}
               transition={{ duration: 0.2 }}
             />
 
-            {/* Label */}
+            {/* Label — highlighter sweeps left→right on active */}
             <motion.span
-              className="font-medium leading-none tracking-[-0.01em] select-none"
+              className="relative font-semibold leading-none tracking-[-0.01em] select-none px-1"
               variants={{
-                idle:    { opacity: 0.4,  fontSize: '0.8rem',    x: 0, color: '#94A3B8' },
-                active:  { opacity: 1,    fontSize: '0.875rem',  x: 2, color: '#0F172A' },
-                hovered: { opacity: 0.8,  fontSize: '0.875rem',  x: 2, color: '#0F172A' },
+                idle:    { opacity: 0.7,  fontSize: '0.78rem',  x: 0, color: '#334155' },
+                active:  { opacity: 1,    fontSize: '0.875rem', x: 2, color: '#0F172A' },
+                hovered: { opacity: 1,    fontSize: '0.85rem',  x: 2, color: '#1E293B' },
               }}
               transition={{ duration: 0.22, ease: 'easeOut' }}
             >
-              {item.label}
+              {/* Vibrant per-item highlighter */}
+              <AnimatePresence>
+                {isActive && (
+                  <motion.span
+                    initial={{ scaleX: 0, opacity: 0 }}
+                    animate={{ scaleX: 1, opacity: 1 }}
+                    exit={{ scaleX: 0, opacity: 0 }}
+                    style={{ originX: 0, background: item.hl }}
+                    transition={{ duration: 0.28, ease: 'easeOut' }}
+                    className="absolute inset-0 -mx-1 -my-0.5 rounded pointer-events-none"
+                    aria-hidden
+                  />
+                )}
+              </AnimatePresence>
+              <span className="relative">{item.label}</span>
             </motion.span>
-
-            {/* Active underline — confident single-sweep */}
-            <AnimatePresence>
-              {isActive && (
-                <motion.span
-                  initial={{ scaleX: 0, opacity: 0 }}
-                  animate={{ scaleX: 1, opacity: 1 }}
-                  exit={{ scaleX: 0, opacity: 0 }}
-                  style={{ originX: 0 }}
-                  className="absolute bottom-0 left-7 right-0 pointer-events-none"
-                  transition={{ duration: 0.28, ease: 'easeOut' }}
-                >
-                  <svg viewBox="0 0 80 5" className="w-full" preserveAspectRatio="none" fill="none">
-                    <path
-                      d="M1,3.5 C25,1 55,4.5 79,2.5"
-                      stroke="#F97316"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </motion.span>
-              )}
-            </AnimatePresence>
           </motion.button>
         );
       })}

@@ -5,7 +5,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Clean slate — primary text (crisper than warm charcoal)
+        // Sophisticated dark — primary text
         ink: {
           DEFAULT: '#0F172A',
           50:  '#F8FAFC',
@@ -29,22 +29,64 @@ const config: Config = {
           300: '#E8DCC8',
           400: '#DBCBB4',
         },
-        // Vibrant indigo — primary brand, CTAs (confident, tech-forward)
+        // Blue — Security, dependability, professionalism (primary brand)
         purple: {
-          DEFAULT: '#4F46E5',
-          50:  '#EEF2FF',
-          100: '#E0E7FF',
-          200: '#C7D2FE',
-          300: '#A5B4FC',
-          400: '#818CF8',
-          500: '#4F46E5',
-          600: '#4338CA',
-          700: '#3730A3',
-          800: '#312E81',
-          900: '#1E1B4B',
+          DEFAULT: '#2563EB',
+          50:  '#EFF6FF',
+          100: '#DBEAFE',
+          200: '#BFDBFE',
+          300: '#93C5FD',
+          400: '#60A5FA',
+          500: '#3B82F6',
+          600: '#2563EB',
+          700: '#1D4ED8',
+          800: '#1E40AF',
+          900: '#1E3A8A',
         },
-        // Warm orange — CTA urgency, action, warmth (contact me NOW)
+        // Yellow/golden — Optimism, creativity, energy (accent marks, highlights)
         amber: {
+          DEFAULT: '#F59E0B',
+          50:  '#FFFBEB',
+          100: '#FEF3C7',
+          200: '#FDE68A',
+          300: '#FCD34D',
+          400: '#FBBF24',
+          500: '#F59E0B',
+          600: '#D97706',
+          700: '#B45309',
+          800: '#92400E',
+          900: '#78350F',
+        },
+        // Green — Health, growth, calm, positive outcomes (availability, success)
+        teal: {
+          DEFAULT: '#16A34A',
+          50:  '#F0FDF4',
+          100: '#DCFCE7',
+          200: '#BBF7D0',
+          300: '#86EFAC',
+          400: '#4ADE80',
+          500: '#22C55E',
+          600: '#16A34A',
+          700: '#15803D',
+          800: '#166534',
+          900: '#14532D',
+        },
+        // Red — Urgency, passion (CTA buttons, contact)
+        red: {
+          DEFAULT: '#DC2626',
+          50:  '#FEF2F2',
+          100: '#FEE2E2',
+          200: '#FECACA',
+          300: '#FCA5A5',
+          400: '#F87171',
+          500: '#EF4444',
+          600: '#DC2626',
+          700: '#B91C1C',
+          800: '#991B1B',
+          900: '#7F1D1D',
+        },
+        // Orange — Innovation, friendliness, approachability (AI/chat elements)
+        orange: {
           DEFAULT: '#F97316',
           50:  '#FFF7ED',
           100: '#FFEDD5',
@@ -56,20 +98,6 @@ const config: Config = {
           700: '#C2410C',
           800: '#9A3412',
           900: '#7C2D12',
-        },
-        // Emerald green — availability, positive outcomes, success
-        teal: {
-          DEFAULT: '#10B981',
-          50:  '#ECFDF5',
-          100: '#D1FAE5',
-          200: '#A7F3D0',
-          300: '#6EE7B7',
-          400: '#34D399',
-          500: '#10B981',
-          600: '#059669',
-          700: '#047857',
-          800: '#065F46',
-          900: '#064E3B',
         },
       },
 
@@ -101,8 +129,10 @@ const config: Config = {
         // Indigo-tinted panel shadow for chat
         'panel':      '0 0 0 1px rgba(79,70,229,0.08), 0 4px 16px rgba(15,23,42,0.06), 0 20px 60px rgba(15,23,42,0.08)',
         'card-hover': '0 8px 24px rgba(15,23,42,0.10), 0 2px 4px rgba(15,23,42,0.04)',
-        // Orange glow for primary CTA
-        'cta':        '0 0 0 1px rgba(249,115,22,0.15), 0 4px 20px rgba(249,115,22,0.25)',
+        // Red glow for urgent CTA
+        'cta':        '0 0 0 1px rgba(220,38,38,0.15), 0 4px 20px rgba(220,38,38,0.25)',
+        // Blue glow for brand elements
+        'cta-blue':   '0 0 0 1px rgba(37,99,235,0.15), 0 4px 20px rgba(37,99,235,0.20)',
         // Glass morphism
         'glass':      '0 4px 20px rgba(15,23,42,0.08), 0 1px 3px rgba(15,23,42,0.04)',
       },

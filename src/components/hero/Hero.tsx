@@ -1,10 +1,7 @@
 'use client';
 
-import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { Container } from '@/components/ui/Container';
 import { HeroIntro } from './HeroIntro';
-import { profile } from '@/lib/data/profile';
 
 /**
  * Hero — full-bleed first impression.
@@ -24,75 +21,43 @@ export function Hero() {
       className="relative min-h-screen flex flex-col overflow-hidden"
       style={{ backgroundColor: '#FAF6EE' }}
     >
-      {/* ── Background: person walking in from left, stopping at right ─── */}
+      {/* ── Background: video with rounded margins ───────────────────── */}
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
 
-        {/* Paper grain overlay */}
+        {/* Video — fills full area, edges blended with gradients, no hard clip */}
+        <div className="absolute inset-0">
+          <video
+            autoPlay
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover object-[100%_top]"
+          >
+            <source src="/bg-video.mp4" type="video/mp4" />
+          </video>
+
+          {/* Very light tint — 5% so video reads at ~95% opacity */}
+          <div className="absolute inset-0 bg-[#FAF6EE]/05" />
+
+          {/* Left — strong fade for text readability */}
+          <div className="absolute inset-y-0 left-0 w-[52%] bg-gradient-to-r from-[#FAF6EE] via-[#FAF6EE]/70 to-transparent" />
+          {/* Right — wide soft blend */}
+          <div className="absolute inset-y-0 right-0 w-[28%] bg-gradient-to-l from-[#FAF6EE] via-[#FAF6EE]/60 to-transparent" />
+          {/* Top — subtle blend, doesn't cut into head */}
+          <div className="absolute inset-x-0 top-0 h-[8%] bg-gradient-to-b from-[#FAF6EE] to-transparent" />
+          {/* Bottom — wide soft blend */}
+          <div className="absolute inset-x-0 bottom-0 h-[30%] bg-gradient-to-t from-[#FAF6EE] via-[#FAF6EE]/50 to-transparent" />
+        </div>
+
+        {/* Paper grain overlay on top of everything */}
         <div
-          className="absolute inset-0 opacity-100"
+          className="absolute inset-0 opacity-100 pointer-events-none"
           style={{
             backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.09'/%3E%3C/svg%3E\")",
+              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E\")",
             backgroundRepeat: 'repeat',
             backgroundSize: '300px 300px',
           }}
         />
-
-        {/* Animated right panel — person slides in from stage-left */}
-        <motion.div
-          className="absolute right-0 top-0 bottom-0 w-[58%]"
-          initial={{ clipPath: 'inset(0 100% 0 0 round 0px)' }}
-          animate={{ clipPath: 'inset(0 0% 0 0 round 0px)' }}
-          transition={{ duration: 1.7, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-        >
-          {/* Ambient gradient blobs */}
-          <motion.div
-            animate={{ scale: [1, 1.12, 1], opacity: [0.5, 0.8, 0.5] }}
-            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute top-0 right-0 w-[80%] h-[80%] bg-purple-100/60 rounded-full blur-3xl"
-          />
-          <motion.div
-            animate={{ scale: [1.1, 1, 1.1], opacity: [0.3, 0.55, 0.3] }}
-            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-            className="absolute bottom-0 right-1/4 w-[60%] h-[60%] bg-amber-100/50 rounded-full blur-3xl"
-          />
-          <motion.div
-            animate={{ scale: [1, 1.08, 1], opacity: [0.4, 0.6, 0.4] }}
-            transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-            className="absolute top-1/3 right-1/3 w-[50%] h-[50%] bg-teal-100/40 rounded-full blur-3xl"
-          />
-
-          {/* Photo — fills the right panel when it exists */}
-          <div className="absolute inset-0 flex items-end justify-center lg:justify-end lg:pr-8">
-            <div className="relative w-full max-w-lg h-[90%] rounded-tl-[2.5rem] overflow-hidden">
-              <Image
-                src={profile.photo}
-                alt={profile.name}
-                fill
-                className="object-cover object-top"
-                sizes="(max-width: 1280px) 50vw, 600px"
-                priority
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.opacity = '0';
-                }}
-              />
-              {/* Fallback initials when no photo */}
-              <div className="absolute inset-0 flex items-center justify-center select-none">
-                <span
-                  className="font-extrabold text-[12rem] leading-none text-purple-200/50 font-sans"
-                  aria-hidden="true"
-                >
-                  PT
-                </span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Left gradient mask — ensures text readability over the background */}
-        <div className="absolute inset-y-0 left-0 w-[65%] bg-gradient-to-r from-[#FAF6EE] via-[#FAFAF7]/95 to-transparent" />
-        {/* Bottom gradient */}
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#FAF6EE]/60 to-transparent" />
       </div>
 
       {/* ── Foreground: intro text — overlaid on the left ────────────── */}

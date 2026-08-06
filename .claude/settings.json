@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmd /c \"dir \\\\\"C:\\\\Users\\\\prana\\\\OneDrive\\\\Desktop\\\\portfolio\\\\\"\")",
+      "Bash(powershell -Command \"Get-ChildItem 'C:\\\\Users\\\\prana\\\\OneDrive\\\\Desktop\\\\portfolio' -Force | Select-Object Name, Length\")",
+      "Bash(powershell -Command \"Copy-Item 'C:\\\\Users\\\\prana\\\\OneDrive\\\\Desktop\\\\portfolio\\\\bg video.mp4' 'C:\\\\Users\\\\prana\\\\OneDrive\\\\Desktop\\\\portfolio\\\\public\\\\bg-video.mp4' -Force; Write-Host 'done'\")"
+    ]
+  }
+}

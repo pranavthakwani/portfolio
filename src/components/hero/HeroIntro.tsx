@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { ArrowDown, ArrowRight, Github, Linkedin, FileText, Mail } from 'lucide-react';
 import { profile } from '@/lib/data/profile';
-import { UnderlineAccent } from '@/components/ui/AccentMark';
+import { UnderlineAccent, StarBurst, DoodleArrow } from '@/components/ui/AccentMark';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils/cn';
 
@@ -54,7 +54,7 @@ export function HeroIntro() {
       </motion.div>
 
       {/* Main heading — handwritten Caveat font */}
-      <motion.div variants={item}>
+      <motion.div variants={item} className="relative">
         <h1
           className="font-accent text-5xl sm:text-7xl lg:text-8xl font-bold text-ink-900 leading-[1.05] mb-5"
           style={{ letterSpacing: '-0.01em' }}
@@ -66,12 +66,19 @@ export function HeroIntro() {
           .
         </h1>
 
+        {/* Decorative starburst near the heading */}
+        <StarBurst
+          color="teal"
+          size={22}
+          className="absolute -top-3 -left-5 opacity-70 animate-spin [animation-duration:8s]"
+        />
+
         <p className="text-lg sm:text-xl font-semibold text-ink-700 leading-relaxed mb-2 max-w-lg">
           I build AI systems that{' '}
           <span className="text-amber-500 font-bold">eliminate</span>
           {' '}the work nobody wants to do.
         </p>
-        <p className="text-sm text-ink-400 leading-relaxed mb-7 max-w-md">
+        <p className="text-sm text-ink-600 leading-relaxed mb-7 max-w-md">
           {profile.bio[0]}
         </p>
       </motion.div>
@@ -81,7 +88,7 @@ export function HeroIntro() {
            Shows what Pranav has actually automated — before → after.
       ───────────────────────────────────────────────────────────────── */}
       <motion.div variants={item} className="mb-8">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-300 mb-3">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-500 mb-3">
           What I&apos;ve eliminated
         </p>
         <div className="flex flex-col gap-2.5">
@@ -94,7 +101,7 @@ export function HeroIntro() {
               className="flex items-center gap-3 group"
             >
               {/* Crossed-out "before" */}
-              <span className="relative text-xs text-ink-300 font-medium">
+              <span className="relative text-xs text-ink-500 font-medium">
                 {before}
                 {/* Strike-through line that draws left to right */}
                 <motion.span
@@ -102,7 +109,7 @@ export function HeroIntro() {
                   animate={{ scaleX: 1 }}
                   transition={{ delay: 1.05 + i * 0.18, duration: 0.35, ease: 'easeOut' }}
                   style={{ originX: 0 }}
-                  className="absolute top-1/2 left-0 right-0 h-px bg-ink-300 -translate-y-px"
+                  className="absolute top-1/2 left-0 right-0 h-px bg-ink-500 -translate-y-px"
                 />
               </span>
 
@@ -116,12 +123,18 @@ export function HeroIntro() {
       </motion.div>
 
       {/* CTA buttons */}
-      <motion.div variants={item} className="flex flex-wrap items-center gap-3 mb-8">
+      <motion.div variants={item} className="relative flex flex-wrap items-center gap-3 mb-8">
+        {/* Doodle arrow pointing at the primary CTA — hand-drawn feel */}
+        <DoodleArrow
+          direction="right"
+          color="purple"
+          className="absolute -left-10 top-1/2 -translate-y-1/2 w-8 h-8 opacity-60 hidden sm:block"
+        />
         <Button
           variant="primary"
           size="lg"
           icon={<Mail size={16} />}
-          className="bg-amber-500 hover:bg-amber-600 shadow-cta text-white"
+          className="bg-purple-600 hover:bg-purple-700 shadow-cta-blue text-white"
           onClick={() => {
             window.location.href = `mailto:${profile.email}?subject=Let%27s%20work%20together`;
           }}
@@ -166,7 +179,7 @@ export function HeroIntro() {
         onClick={() => {
           document.getElementById('chat')?.scrollIntoView({ behavior: 'smooth' });
         }}
-        className="inline-flex items-center gap-2 text-xs font-medium text-ink-300 hover:text-ink-600 transition-colors duration-200 cursor-pointer group w-fit"
+        className="inline-flex items-center gap-2 text-xs font-medium text-ink-500 hover:text-ink-700 transition-colors duration-200 cursor-pointer group w-fit"
       >
         <motion.span
           animate={{ y: [0, 3, 0] }}

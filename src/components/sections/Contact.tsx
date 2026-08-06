@@ -50,7 +50,7 @@ export function Contact() {
             size="lg"
             onClick={handleEmailClick}
             icon={sent ? <Check size={16} /> : <Send size={16} />}
-            className="min-w-[200px]"
+            className="min-w-[200px] bg-purple-600 hover:bg-purple-700 shadow-cta-blue"
           >
             {sent ? 'Opening email…' : 'Send me an email'}
           </Button>
