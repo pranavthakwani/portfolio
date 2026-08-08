@@ -35,13 +35,13 @@ export function SectionWrapper({
     <section
       id={id}
       className={cn(
-        'relative section-py',
+        'relative section-py overflow-hidden playful-section',
         backgrounds[background],
         withDivider && 'section-divider',
         className
       )}
     >
-      <Container size={containerSize} className={containerClassName}>
+      <Container size={containerSize} className={cn('relative z-10', containerClassName)}>
         {children}
       </Container>
     </section>

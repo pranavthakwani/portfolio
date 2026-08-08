@@ -26,12 +26,20 @@ export function ChatInput({
   const handleSend = useCallback(() => {
     const trimmed = value.trim();
     if (!trimmed || isStreaming || disabled) return;
+    const pageScrollY = window.scrollY;
+    const pageScrollX = window.scrollX;
+
     onSend(trimmed);
     setValue('');
-    // Reset textarea height
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-    }
+
+    // Reset the composer without letting the focused textarea move the page.
+    requestAnimationFrame(() => {
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+        textareaRef.current.focus({ preventScroll: true });
+      }
+      window.scrollTo({ top: pageScrollY, left: pageScrollX, behavior: 'auto' });
+    });
   }, [value, isStreaming, disabled, onSend]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -52,11 +60,11 @@ export function ChatInput({
   const canSend = value.trim().length > 0 && !disabled;
 
   return (
-    <div className="p-3 border-t border-ink-100 bg-white/80 backdrop-blur-sm rounded-b-2xl">
+    <div className="p-4 border-t-2 border-ink-900/10 bg-paper-200/75 backdrop-blur-sm rounded-b-2xl">
       <div
         className={cn(
           'flex items-end gap-2 rounded-xl border transition-all duration-200',
-          'bg-paper-100 px-3 py-2.5',
+          'bg-white px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,.8)]',
           disabled
             ? 'border-ink-100 opacity-60'
             : 'border-ink-200 focus-within:border-purple-300 focus-within:shadow-purple-glow'
@@ -72,8 +80,8 @@ export function ChatInput({
           rows={1}
           aria-label="Chat input"
           className={cn(
-            'flex-1 resize-none bg-transparent text-xs text-ink-800 placeholder-ink-300',
-            'outline-none leading-relaxed min-h-[20px] max-h-[120px]',
+            'flex-1 resize-none bg-transparent font-accent text-lg font-bold text-ink-900 placeholder:text-ink-500',
+            'outline-none leading-relaxed min-h-[26px] max-h-[120px]',
             'scrollbar-none'
           )}
           style={{ scrollbarWidth: 'none' }}
@@ -97,7 +105,7 @@ export function ChatInput({
         </motion.button>
       </div>
 
-      <p className="mt-1.5 text-[10px] text-ink-300 text-center">
+      <p className="mt-2 text-[10px] font-medium text-ink-500 text-center">
         Shift+Enter for new line · powered by a custom RAG pipeline
       </p>
     </div>

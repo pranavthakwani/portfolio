@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
 import type { ChatMessage as ChatMessageType } from '@/types';
 import { MarkdownRenderer } from './MarkdownRenderer';
 import { TypingIndicator } from './TypingIndicator';
@@ -15,8 +14,8 @@ interface ChatMessageProps {
 /* ── Assistant avatar ───────────────────────────────────────────────── */
 function AssistantAvatar() {
   return (
-    <div className="shrink-0 w-7 h-7 rounded-xl bg-gradient-to-br from-purple-100 to-teal-100 flex items-center justify-center shadow-soft">
-      <Sparkles size={13} className="text-purple-500" />
+    <div className="shrink-0 w-8 h-8 rounded-xl border border-teal-300 bg-teal-50 flex items-center justify-center shadow-soft -rotate-3">
+      <span className="font-accent text-lg font-bold leading-none text-teal-700">P</span>
     </div>
   );
 }

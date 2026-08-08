@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, RotateCcw } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import { useChat } from '@/hooks/useChat';
 import { ChatMessage, StreamingAssistantMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
@@ -11,7 +11,6 @@ import { cn } from '@/lib/utils/cn';
 
 export function ChatPanel() {
   const { messages, isStreaming, streamingContent, sendMessage, clearMessages } = useChat();
-  const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const hasMessages = messages.length > 0;
@@ -25,7 +24,7 @@ export function ChatPanel() {
       container.scrollHeight - container.scrollTop - container.clientHeight < 120;
 
     if (isNearBottom || isStreaming) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
     }
   }, [messages, streamingContent, isStreaming]);
 
@@ -35,23 +34,23 @@ export function ChatPanel() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
       className={cn(
-        'flex flex-col h-full rounded-2xl overflow-hidden',
-        'glass-panel'
+        'flex flex-col h-full rounded-[1.4rem] overflow-hidden',
+        'border-2 border-ink-900/80 bg-[#fffdf8] shadow-[8px_9px_0_rgba(22,163,74,0.18),0_24px_60px_rgba(15,23,42,0.13)]'
       )}
     >
       {/* ── Header ──────────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between px-4 py-3.5 border-b border-white/60 shrink-0">
+      <div className="flex items-center justify-between px-5 py-4 border-b-2 border-ink-900/10 bg-paper-200/70 shrink-0">
         <div className="flex items-center gap-2.5">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-50" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-500" />
           </span>
           <div>
-            <span className="text-xs font-semibold text-ink-800 leading-none block">
-              Pranav&apos;s AI Assistant
+            <span className="font-accent text-xl font-bold text-ink-900 leading-none block">
+              Ask Pranav&apos;s work
             </span>
-            <span className="text-[10px] text-ink-400 leading-none mt-0.5 block">
-              Powered by his actual knowledge base
+            <span className="text-[11px] font-medium text-ink-600 leading-none mt-1 block">
+              Answers grounded in real projects and experience
             </span>
           </div>
         </div>
@@ -69,16 +68,14 @@ export function ChatPanel() {
               <RotateCcw size={13} />
             </motion.button>
           )}
-          <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-purple-50 border border-purple-100/60">
-            <Sparkles size={13} className="text-purple-400" />
-          </div>
+          <span aria-hidden="true" className="chat-brush-mark"><i /><i /><i /></span>
         </div>
       </div>
 
       {/* ── Message area ────────────────────────────────────────────── */}
       <div
         ref={scrollContainerRef}
-        className="flex-1 overflow-y-auto px-4 py-4"
+        className={cn('flex-1 px-5 py-5', hasMessages || isStreaming ? 'overflow-y-auto' : 'overflow-hidden')}
         style={{ scrollbarWidth: 'thin' }}
       >
         {!hasMessages && !isStreaming ? (
@@ -94,7 +91,6 @@ export function ChatPanel() {
                 hasStarted={hasStartedStreaming}
               />
             )}
-            <div ref={messagesEndRef} />
           </div>
         )}
       </div>

@@ -42,6 +42,10 @@ export interface Project {
   title: string;
   tagline: string;
   description: string;
+  details: string[];
+  decisions: string[];
+  learningOutcomes: string[];
+  videoUrl?: string;
   outcome: string; // measurable business result
   tags: string[];
   category: ProjectCategory;
@@ -102,8 +106,11 @@ export interface Profile {
     github?: string;
     linkedin?: string;
     twitter?: string;
+    whatsapp?: string;
+    instagram?: string;
+    facebook?: string;
+    chess?: string;
     resume?: string;
   };
   availability: 'open' | 'selective' | 'closed';
-  availabilityNote: string;
 }

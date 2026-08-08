@@ -22,7 +22,7 @@ export const suggestedPrompts: SuggestedPrompt[] = [
     id: 'best-project',
     label: 'Best AI project',
     prompt: 'Tell me about your most impactful AI project in detail.',
-    icon: 'Sparkles',
+    icon: 'Trophy',
   },
   {
     id: 'rag-explained',

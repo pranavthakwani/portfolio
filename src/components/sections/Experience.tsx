@@ -14,7 +14,6 @@ export function Experience() {
       <SectionHeading
         eyebrow="Career"
         heading={<><CircleAccent color="teal">Where</CircleAccent> I&apos;ve worked</>}
-        subheading="4+ years of engineering experience, last 2+ focused entirely on AI systems."
         className="mb-12"
       />
 

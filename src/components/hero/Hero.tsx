@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+import Image from 'next/image';
 import { Container } from '@/components/ui/Container';
 import { HeroIntro } from './HeroIntro';
 
@@ -15,6 +17,9 @@ import { HeroIntro } from './HeroIntro';
  * The gradient mask ensures text on the left is always readable.
  */
 export function Hero() {
+  const [automated, setAutomated] = useState(false);
+  const [toggleReady, setToggleReady] = useState(false);
+
   return (
     <section
       id="home"
@@ -30,10 +35,24 @@ export function Hero() {
             autoPlay
             muted
             playsInline
+            onTimeUpdate={(event) => {
+              if (event.currentTarget.currentTime >= 7) setToggleReady(true);
+            }}
+            onEnded={() => setToggleReady(true)}
             className="absolute inset-0 w-full h-full object-cover object-[100%_top]"
           >
             <source src="/bg-video.mp4" type="video/mp4" />
           </video>
+
+          <Image
+            src="/toggle-bg.png"
+            alt=""
+            fill
+            priority
+            unoptimized
+            aria-hidden="true"
+            className={`object-cover object-[100%_top] transition-opacity duration-700 ${automated ? 'opacity-100' : 'opacity-0'}`}
+          />
 
           {/* Very light tint — 5% so video reads at ~95% opacity */}
           <div className="absolute inset-0 bg-[#FAF6EE]/05" />
@@ -61,9 +80,13 @@ export function Hero() {
       </div>
 
       {/* ── Foreground: intro text — overlaid on the left ────────────── */}
-      <Container className="relative z-10 flex-1 flex flex-col justify-center py-20 lg:py-0">
+      <Container className="relative z-10 flex-1 flex flex-col justify-center py-20 lg:py-0 lg:pl-32 xl:pl-32">
         <div className="w-full max-w-xl lg:max-w-2xl">
-          <HeroIntro />
+          <HeroIntro
+            automated={automated}
+            showAutomationToggle={toggleReady}
+            onAutomationChange={setAutomated}
+          />
         </div>
       </Container>
     </section>

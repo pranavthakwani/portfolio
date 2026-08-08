@@ -12,7 +12,7 @@
  */
 
 import { FloatingNav } from '@/components/layout/FloatingNav';
-import { ChessKnight } from '@/components/ui/ChessKnight';
+import { SocialRail } from '@/components/layout/SocialRail';
 import { Footer } from '@/components/layout/Footer';
 import { Hero } from '@/components/hero/Hero';
 import { ChatSection } from '@/components/sections/ChatSection';
@@ -26,7 +26,7 @@ export default function HomePage() {
   return (
     <>
       <FloatingNav />
-      <ChessKnight />
+      <SocialRail />
 
       <main>
         {/* 1. Hero — human intro + animated photo */}

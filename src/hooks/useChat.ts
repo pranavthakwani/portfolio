@@ -2,13 +2,12 @@
 
 import { useState, useCallback, useRef } from 'react';
 import type { ChatMessage } from '@/types';
-import { mockChatService } from '@/lib/chat/mockChatService';
+import { apiChatService } from '@/lib/chat/apiChatService';
 
 /* ─── To connect a real backend:
-   1. Create src/lib/chat/apiChatService.ts and implement IChatService
-   2. Replace `mockChatService` below with your real service
+   Connected to the standalone RAG service through the same-origin /api/chat proxy.
    ─────────────────────────────────────────────────────────────── */
-const chatService = mockChatService;
+const chatService = apiChatService;
 
 function generateId(): string {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);

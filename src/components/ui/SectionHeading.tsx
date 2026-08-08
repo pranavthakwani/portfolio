@@ -38,7 +38,7 @@ export function SectionHeading({
       viewport={{ once: true, margin: '-10%' }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: animationDelay }}
       className={cn(
-        'flex flex-col',
+        'relative flex flex-col editorial-heading',
         align === 'center' && 'items-center text-center',
         className
       )}
@@ -54,12 +54,17 @@ export function SectionHeading({
 
       <h2
         className={cn(
-          'font-accent text-display-md font-bold text-ink-900 leading-[1.1] tracking-tight',
+          'font-accent text-[2.65rem] sm:text-display-lg font-bold text-ink-900 leading-[1.05] tracking-tight',
           align === 'center' ? 'max-w-2xl' : 'max-w-xl'
         )}
       >
         {heading}
       </h2>
+
+      <span
+        aria-hidden="true"
+        className={cn('editorial-spark', align === 'center' ? '-right-8 top-8' : 'left-[min(92%,34rem)] top-7')}
+      />
 
       {subheading && (
         <p

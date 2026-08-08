@@ -199,6 +199,163 @@
 
 /* ─── Component Layer ─────────────────────────────────────────────── */
 @layer components {
+  /* Odoo-inspired editorial details: deliberately imperfect, low-noise marks. */
+  .hero-brush-stack {
+    width: 4.5rem;
+    height: 1.5rem;
+    background:
+      linear-gradient(#7c3aed 0 0) 0 1px / 82% 3px no-repeat,
+      linear-gradient(#ec4899 0 0) 32% 9px / 68% 3px no-repeat,
+      linear-gradient(#14b8a6 0 0) 8% 17px / 42% 3px no-repeat;
+    transform: rotate(-4deg);
+    border-radius: 999px;
+  }
+
+  .editorial-heading::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -0.25rem;
+    width: 3.25rem;
+    height: 1.45rem;
+    opacity: 0.82;
+    pointer-events: none;
+    transform: rotate(-5deg);
+    background: linear-gradient(#7c3aed 0 0) 0 8px / 88% 4px no-repeat;
+  }
+
+  #projects .editorial-heading::after {
+    width: 4.5rem;
+    background:
+      linear-gradient(#ec4899 0 0) 0 0 / 82% 3px no-repeat,
+      linear-gradient(#14b8a6 0 0) 26% 8px / 74% 3px no-repeat,
+      linear-gradient(#7c3aed 0 0) 8% 17px / 46% 3px no-repeat;
+  }
+
+  #experience .editorial-heading::after {
+    width: 4.8rem;
+    background:
+      linear-gradient(#06b6d4 0 0) 0 0 / 55% 3px no-repeat,
+      linear-gradient(#8b5cf6 0 0) 35% 6px / 65% 3px no-repeat,
+      linear-gradient(#f43f5e 0 0) 8% 13px / 72% 3px no-repeat,
+      linear-gradient(#22c55e 0 0) 54% 20px / 34% 3px no-repeat;
+  }
+
+  #skills .editorial-heading::after {
+    width: 5.2rem;
+    height: 1.8rem;
+    background:
+      linear-gradient(#8b5cf6 0 0) 0 0 / 48% 3px no-repeat,
+      linear-gradient(#ec4899 0 0) 52% 4px / 42% 3px no-repeat,
+      linear-gradient(#06b6d4 0 0) 18% 10px / 72% 3px no-repeat,
+      linear-gradient(#22c55e 0 0) 0 17px / 35% 3px no-repeat,
+      linear-gradient(#6366f1 0 0) 48% 23px / 50% 3px no-repeat;
+  }
+
+  #about .editorial-heading::after {
+    width: 4rem;
+    background:
+      linear-gradient(#f43f5e 0 0) 0 4px / 92% 4px no-repeat,
+      linear-gradient(#06b6d4 0 0) 38% 15px / 54% 3px no-repeat;
+    transform: rotate(4deg);
+  }
+
+  #contact .editorial-heading::after {
+    width: 2.8rem;
+    background: linear-gradient(#ec4899 0 0) 0 10px / 100% 4px no-repeat;
+    transform: rotate(6deg);
+  }
+
+  .toggle-bloom {
+    position: absolute;
+    inset: -0.9rem -1rem;
+    z-index: 0;
+    pointer-events: none;
+    animation: toggle-bloom-pulse 1.9s ease-in-out infinite;
+  }
+
+  .toggle-bloom i {
+    position: absolute;
+    display: block;
+    height: 3px;
+    border-radius: 999px;
+    transform-origin: center;
+  }
+
+  .toggle-bloom i:nth-child(1) { width: 11px; left: 6px;  top: 8px;  background: #7c3aed; transform: rotate(58deg); }
+  .toggle-bloom i:nth-child(2) { width: 8px;  left: 38px; top: 0;    background: #14b8a6; transform: rotate(92deg); }
+  .toggle-bloom i:nth-child(3) { width: 13px; right: 12px; top: 5px; background: #ec4899; transform: rotate(118deg); }
+  .toggle-bloom i:nth-child(4) { width: 9px;  right: 0; top: 25px; background: #6366f1; transform: rotate(8deg); }
+  .toggle-bloom i:nth-child(5) { width: 12px; right: 22px; bottom: 2px; background: #22c55e; transform: rotate(62deg); }
+  .toggle-bloom i:nth-child(6) { width: 8px;  left: 48px; bottom: 0; background: #ec4899; transform: rotate(104deg); }
+  .toggle-bloom i:nth-child(7) { width: 12px; left: 0; bottom: 10px; background: #06b6d4; transform: rotate(-12deg); }
+
+  @keyframes toggle-bloom-pulse {
+    0%, 100% { transform: scale(0.95) rotate(-1deg); opacity: 0.55; }
+    50% { transform: scale(1.04) rotate(1deg); opacity: 0.95; }
+  }
+  .editorial-spark {
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    pointer-events: none;
+    opacity: 0.75;
+    background:
+      linear-gradient(#22c55e 0 0) 50% 0 / 3px 9px no-repeat,
+      linear-gradient(#22c55e 0 0) 50% 100% / 3px 9px no-repeat,
+      linear-gradient(90deg, #22c55e 0 0) 0 50% / 9px 3px no-repeat,
+      linear-gradient(90deg, #22c55e 0 0) 100% 50% / 9px 3px no-repeat;
+    transform: rotate(12deg);
+  }
+
+  .playful-section::before,
+  .playful-section::after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.24;
+  }
+
+  .playful-section::before {
+    width: 9rem;
+    height: 6rem;
+    right: clamp(-3rem, -1vw, -1rem);
+    top: 12%;
+    background-image: radial-gradient(circle, #2563eb 1.7px, transparent 1.9px);
+    background-size: 14px 14px;
+    transform: rotate(8deg);
+    mask-image: linear-gradient(90deg, transparent, black);
+  }
+
+  .playful-section::after {
+    width: 7rem;
+    height: 1.2rem;
+    left: -1.25rem;
+    bottom: 12%;
+    background:
+      linear-gradient(#8b5cf6 0 0) 0 0 / 72% 4px no-repeat,
+      linear-gradient(#ec4899 0 0) 40% 9px / 60% 4px no-repeat,
+      linear-gradient(#06b6d4 0 0) 12% 17px / 36% 3px no-repeat;
+    transform: rotate(-3deg);
+  }
+
+  #projects.playful-section::before,
+  #about.playful-section::before {
+    background-image: radial-gradient(circle, #f59e0b 1.7px, transparent 1.9px);
+  }
+
+  #experience.playful-section::after,
+  #contact.playful-section::after {
+    transform: rotate(4deg);
+    background-position: 0 0, 10% 9px;
+  }
+
+  @media (max-width: 640px) {
+    .playful-section::before { width: 5rem; opacity: 0.16; }
+    .playful-section::after { opacity: 0.16; }
+    .editorial-heading::after { display: none; }
+  }
   .nav-item {
     @apply font-sans font-medium text-sm text-ink-400 transition-all duration-300 cursor-pointer
            hover:text-ink-900 relative py-1;
@@ -227,4 +384,18 @@
     border: 1px solid var(--border-subtle);
     box-shadow: 0 1px 3px rgba(15,23,42,0.04);
   }
+  .chat-brush-mark {
+    @apply relative block h-8 w-12 shrink-0;
+    transform: rotate(-7deg);
+  }
+
+  .chat-brush-mark i {
+    @apply absolute left-0 block rounded-full;
+    height: 3px;
+  }
+
+  .chat-brush-mark i:nth-child(1) { top: 5px; width: 2.6rem; background: #2563eb; }
+  .chat-brush-mark i:nth-child(2) { top: 14px; left: 9px; width: 2rem; background: #ec4899; }
+  .chat-brush-mark i:nth-child(3) { top: 23px; left: 3px; width: 1.5rem; background: #16a34a; }
+
 }

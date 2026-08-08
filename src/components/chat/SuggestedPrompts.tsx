@@ -2,14 +2,14 @@
 
 import { motion } from 'framer-motion';
 import {
-  TrendingUp, Sparkles, Database, GitMerge, Layers, Code2, LucideIcon
+  TrendingUp, Trophy, Database, GitMerge, Layers, Code2, MessageCircle, LucideIcon
 } from 'lucide-react';
 import { suggestedPrompts } from '@/lib/data/suggestedPrompts';
 import { cn } from '@/lib/utils/cn';
 
 const iconMap: Record<string, LucideIcon> = {
   TrendingUp,
-  Sparkles,
+  Trophy,
   Database,
   GitMerge,
   Layers,
@@ -42,7 +42,7 @@ export function SuggestedPrompts({ onSelect }: SuggestedPromptsProps) {
       className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-1"
     >
       {suggestedPrompts.map((prompt) => {
-        const Icon = iconMap[prompt.icon] ?? Sparkles;
+        const Icon = iconMap[prompt.icon] ?? MessageCircle;
 
         return (
           <motion.button
@@ -53,7 +53,7 @@ export function SuggestedPrompts({ onSelect }: SuggestedPromptsProps) {
             onClick={() => onSelect(prompt.prompt)}
             className={cn(
               'group flex items-start gap-3 text-left p-3.5 rounded-xl',
-              'border border-ink-100 bg-white hover:border-purple-200',
+              'border border-ink-200 bg-paper-50 hover:border-purple-300 hover:bg-white',
               'transition-colors duration-200 cursor-pointer',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-300'
             )}
@@ -68,7 +68,7 @@ export function SuggestedPrompts({ onSelect }: SuggestedPromptsProps) {
               <span className="block text-xs font-semibold text-ink-700 group-hover:text-ink-900 leading-snug mb-0.5 transition-colors duration-200">
                 {prompt.label}
               </span>
-              <span className="block text-[11px] text-ink-400 group-hover:text-ink-500 leading-relaxed transition-colors duration-200 line-clamp-2">
+              <span className="block text-[11px] font-medium text-ink-600 group-hover:text-ink-700 leading-relaxed transition-colors duration-200 line-clamp-2">
                 {prompt.prompt}
               </span>
             </span>
