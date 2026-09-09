@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Plus_Jakarta_Sans, Caveat, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
+import { AnalyticsTracker } from '@/components/analytics/AnalyticsTracker';
 
 /* ─── Fonts ─────────────────────────────────────────────────────────
    next/font automatically self-hosts, preloads, and prevents FOUT.
@@ -85,6 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="font-sans antialiased bg-paper-100 text-ink-900 overflow-x-hidden">
         {children}
+        <AnalyticsTracker />
       </body>
     </html>
   );

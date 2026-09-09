@@ -65,8 +65,7 @@ export function useChat(): UseChatReturn {
         const errorMessage: ChatMessage = {
           id: generateId(),
           role: 'assistant',
-          content:
-            "I encountered an error processing your request. Please try again.",
+          content: error.message || "I encountered an error processing your request. Please try again.",
           createdAt: new Date(),
         };
         setMessages((prev) => [...prev, errorMessage]);

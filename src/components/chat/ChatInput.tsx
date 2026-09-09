@@ -105,9 +105,10 @@ export function ChatInput({
         </motion.button>
       </div>
 
-      <p className="mt-2 text-[10px] font-medium text-ink-500 text-center">
-        Shift+Enter for new line · powered by a custom RAG pipeline
-      </p>
+      <div className="mt-2 text-center text-[11px] font-medium leading-relaxed text-ink-500">
+        <p>Shift+Enter for a new line · maximum 20 questions per visitor each day.</p>
+        <p>Questions are privately logged for diagnostics. The limit keeps this live demo affordable. Need more? <a className="font-bold text-purple-600 underline decoration-purple-300 underline-offset-2" href="mailto:pranavthakwani@gmail.com">Contact me directly.</a></p>
+      </div>
     </div>
   );
 }

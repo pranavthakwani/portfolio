@@ -1,4 +1,5 @@
 import type { ChatMessage, ChatServiceOptions, IChatService } from '@/types';
+import { browserVisitorId } from '@/lib/analytics/identity';
 
 interface ApiChatRequest {
   message: string;
@@ -33,7 +34,7 @@ export class ApiChatService implements IChatService {
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', 'x-visitor-id': browserVisitorId() },
         body: JSON.stringify(request),
         cache: 'no-store',
         signal,
