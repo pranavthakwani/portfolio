@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ANALYTICS_CONSENT_KEY, browserSessionId, browserVisitorId } from '@/lib/analytics/identity';
 
-type EventName = 'page_view' | 'click' | 'section_dwell' | 'scroll_depth';
+type EventName = 'page_view' | 'click' | 'section_view' | 'section_dwell' | 'scroll_depth';
 type QueuedEvent = { eventName: EventName; sessionId: string; path: string; occurredAt: string; data: Record<string, string | number | boolean | null> };
 
 function browserName(): string {
@@ -22,12 +22,13 @@ export function AnalyticsTracker() {
   useEffect(() => setConsent(localStorage.getItem(ANALYTICS_CONSENT_KEY) as 'yes' | 'no' | null), []);
 
   useEffect(() => {
-    if (consent !== 'yes' || started.current || location.pathname.startsWith('/diagnostics')) return;
+    if (consent !== 'yes' || started.current || location.pathname.startsWith('/diagnostics') || new URLSearchParams(location.search).has('analytics-preview')) return;
     started.current = true;
     const sessionId = browserSessionId();
     const visitorId = browserVisitorId();
     const queue: QueuedEvent[] = [];
     const sectionStarts = new Map<string, number>();
+    const viewedSections = new Set<string>();
     let clickCount = 0;
     let maxScroll = 0;
     const flush = () => {
@@ -48,17 +49,21 @@ export function AnalyticsTracker() {
       device: innerWidth < 768 ? 'mobile' : innerWidth < 1100 ? 'tablet' : 'desktop',
       screenWidth: screen.width, screenHeight: screen.height,
     });
+    flush();
     const onClick = (event: MouseEvent) => {
       if (++clickCount > 200) return;
       const target = event.target as HTMLElement | null;
       if (target?.closest('input,textarea,[contenteditable="true"],[data-analytics-ignore]')) return;
       const control = target?.closest('a,button,[role="button"]') as HTMLElement | null;
       const section = target?.closest('section[id]') as HTMLElement | null;
+      const sectionRect = section?.getBoundingClientRect();
       enqueue('click', {
         xPct: Number(((event.pageX / Math.max(1, document.documentElement.scrollWidth)) * 100).toFixed(2)),
         yPct: Number(((event.pageY / Math.max(1, document.documentElement.scrollHeight)) * 100).toFixed(2)),
         viewportXPct: Number(((event.clientX / Math.max(1, innerWidth)) * 100).toFixed(2)),
         viewportYPct: Number(((event.clientY / Math.max(1, innerHeight)) * 100).toFixed(2)),
+        sectionXPct: sectionRect ? Number((((event.clientX - sectionRect.left) / Math.max(1, sectionRect.width)) * 100).toFixed(2)) : null,
+        sectionYPct: sectionRect ? Number((((event.clientY - sectionRect.top) / Math.max(1, sectionRect.height)) * 100).toFixed(2)) : null,
         target: (control?.getAttribute('aria-label') || control?.innerText || control?.id || control?.tagName || 'page').trim().slice(0, 100),
         section: section?.id || 'outside-section',
       });
@@ -70,7 +75,13 @@ export function AnalyticsTracker() {
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         const id = (entry.target as HTMLElement).id;
-        if (entry.isIntersecting) sectionStarts.set(id, Date.now());
+        if (entry.isIntersecting) {
+          sectionStarts.set(id, Date.now());
+          if (!viewedSections.has(id)) {
+            viewedSections.add(id);
+            enqueue('section_view', { section: id });
+          }
+        }
         else if (sectionStarts.has(id)) {
           const durationMs = Date.now() - (sectionStarts.get(id) || Date.now());
           sectionStarts.delete(id);
