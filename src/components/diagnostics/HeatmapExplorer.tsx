@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export type HeatClick = {
   occurredAt: string;
@@ -8,111 +8,102 @@ export type HeatClick = {
   section: string;
   xPct: number;
   yPct: number;
-  viewportXPct: number;
-  viewportYPct: number;
-  sectionXPct?: number;
-  sectionYPct?: number;
 };
 
-const sectionLabel = (value: string) => value
+export type AttentionPoint = { section: string; averageMs: number; samples: number };
+
+const label = (value: string) => value
   .replace(/^outside-section$/, 'Page shell')
   .replace(/[-_]+/g, ' ')
   .replace(/\b\w/g, (letter) => letter.toUpperCase());
 
-export function HeatmapExplorer({ clicks }: { clicks: HeatClick[] }) {
-  const sections = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const click of clicks) counts.set(click.section, (counts.get(click.section) || 0) + 1);
-    return [...counts].sort((a, b) => b[1] - a[1]);
-  }, [clicks]);
-  const [selected, setSelected] = useState(() => sections[0]?.[0] || 'home');
-  const selectedClicks = clicks.filter((click) => click.section === selected);
-  const targets = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const click of selectedClicks) counts.set(click.target, (counts.get(click.target) || 0) + 1);
-    return [...counts].sort((a, b) => b[1] - a[1]).slice(0, 5);
-  }, [selectedClicks]);
-  const previewAnchor = selected === 'outside-section' || selected === 'home' ? '' : `#${encodeURIComponent(selected)}`;
+const formatDuration = (milliseconds: number) => {
+  const seconds = Math.round(milliseconds / 1_000);
+  if (seconds < 60) return `${seconds}s avg.`;
+  return `${Math.floor(seconds / 60)}m ${seconds % 60}s avg.`;
+};
+
+export function HeatmapExplorer({ clicks, attention }: { clicks: HeatClick[]; attention: AttentionPoint[] }) {
+  const [open, setOpen] = useState(false);
+  const frameRef = useRef<HTMLIFrameElement>(null);
+
+  const addMarkers = () => {
+    const frame = frameRef.current;
+    const document = frame?.contentDocument;
+    if (!document?.body) return;
+    document.getElementById('portfolio-behaviour-map-layer')?.remove();
+    document.getElementById('portfolio-behaviour-map-style')?.remove();
+
+    const style = document.createElement('style');
+    style.id = 'portfolio-behaviour-map-style';
+    style.textContent = `
+      #portfolio-behaviour-map-layer { position:absolute; inset:0 auto auto 0; z-index:2147483646; width:100%; pointer-events:none; }
+      .portfolio-map-dot { position:absolute; width:30px; height:30px; transform:translate(-50%,-50%); border-radius:999px; background:rgba(239,68,68,.72); border:2px solid rgba(254,240,138,.98); box-shadow:0 0 0 9px rgba(239,68,68,.18),0 0 24px rgba(239,68,68,.82); }
+      .portfolio-map-dot span { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); color:#fff; font:700 11px/1 system-ui,sans-serif; text-shadow:0 1px 2px #7f1d1d; }
+      .portfolio-map-attention { position:absolute; left:18px; z-index:2; border:1px solid rgba(16,185,129,.9); border-radius:999px; padding:7px 10px; background:rgba(6,78,59,.92); color:#ecfdf5; font:700 12px/1.2 system-ui,sans-serif; box-shadow:0 4px 14px rgba(6,78,59,.3); }
+      a, button, input, textarea, select { pointer-events:none !important; }
+    `;
+    document.head.append(style);
+
+    const layer = document.createElement('div');
+    layer.id = 'portfolio-behaviour-map-layer';
+    const documentHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight, document.documentElement.offsetHeight);
+    layer.style.height = `${documentHeight}px`;
+    document.body.style.position = 'relative';
+
+    const clusters = new Map<string, HeatClick[]>();
+    for (const click of clicks) {
+      const key = `${Math.round(click.xPct / 2) * 2}-${Math.round(click.yPct / 2) * 2}`;
+      clusters.set(key, [...(clusters.get(key) || []), click]);
+    }
+    for (const group of clusters.values()) {
+      const first = group[0];
+      if (!first) continue;
+      const dot = document.createElement('div');
+      dot.className = 'portfolio-map-dot';
+      dot.style.left = `${Math.min(98, Math.max(2, first.xPct))}%`;
+      dot.style.top = `${Math.min(99, Math.max(1, first.yPct))}%`;
+      dot.title = group.map((click) => `${click.target} · ${label(click.section)}`).join('\n');
+      if (group.length > 1) {
+        const count = document.createElement('span');
+        count.textContent = String(group.length);
+        dot.append(count);
+      }
+      layer.append(dot);
+    }
+
+    for (const point of attention) {
+      const section = document.getElementById(point.section);
+      if (!section) continue;
+      const badge = document.createElement('div');
+      badge.className = 'portfolio-map-attention';
+      badge.style.top = `${Math.max(10, section.offsetTop + 14)}px`;
+      badge.textContent = `Viewed: ${label(point.section)} · ${formatDuration(point.averageMs)}`;
+      layer.append(badge);
+    }
+    document.body.append(layer);
+  };
+
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === 'Escape') setOpen(false); };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKeyDown);
+    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', onKeyDown); };
+  }, [open]);
 
   return (
-    <article className="rounded-2xl border border-slate-800 bg-slate-900 p-5 sm:p-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[.18em] text-rose-400">Behaviour map</p>
-          <h2 className="mt-1 text-xl font-bold text-white">Where people click</h2>
-          <p className="mt-1 text-sm text-slate-400">Choose a section to see clicks over the actual portfolio—not an abstract canvas.</p>
-        </div>
-        <div className="rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 text-right">
-          <p className="text-2xl font-bold text-white">{selectedClicks.length}</p>
-          <p className="text-xs text-slate-500">clicks in this section</p>
-        </div>
-      </div>
+    <>
+      <button type="button" onClick={() => setOpen(true)} className="group block w-full rounded-2xl border border-slate-800 bg-slate-900 p-5 text-left transition hover:-translate-y-0.5 hover:border-rose-400/60 hover:bg-slate-900/80 sm:p-6">
+        <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.18em] text-rose-400">Behaviour map</p><h2 className="mt-1 text-xl font-bold text-white">Open the scrollable site view</h2><p className="mt-1 text-sm text-slate-400">Scroll through the actual portfolio with recorded clicks and attention markers directly on top of it.</p></div><span className="rounded-xl bg-rose-400 px-4 py-3 text-sm font-bold text-slate-950 transition group-hover:bg-rose-300">Explore map →</span></div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-3"><div className="rounded-xl border border-slate-800 bg-slate-950 p-4"><p className="text-2xl font-bold text-white">{clicks.length}</p><p className="mt-1 text-xs text-slate-500">recorded clicks</p></div><div className="rounded-xl border border-slate-800 bg-slate-950 p-4"><p className="text-2xl font-bold text-white">{attention.length}</p><p className="mt-1 text-xs text-slate-500">attention signals</p></div><div className="rounded-xl border border-slate-800 bg-slate-950 p-4"><p className="text-sm font-semibold text-emerald-300">Red = clicks</p><p className="mt-1 text-sm font-semibold text-emerald-300">Green = attention</p></div></div>
+      </button>
 
-      <div className="mt-5 flex gap-2 overflow-x-auto pb-2" aria-label="Heatmap section filters">
-        {(sections.length ? sections : [['home', 0] as [string, number]]).map(([section, count]) => (
-          <button
-            type="button"
-            key={section}
-            onClick={() => setSelected(section)}
-            className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition ${selected === section ? 'border-emerald-300 bg-emerald-300 text-slate-950' : 'border-slate-700 bg-slate-950 text-slate-300 hover:border-slate-500'}`}
-          >
-            {sectionLabel(section)} <span className="ml-1 opacity-60">{count}</span>
-          </button>
-        ))}
-      </div>
-
-      <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_18rem]">
-        <div className="relative aspect-[16/10] min-h-[28rem] overflow-hidden rounded-xl border border-slate-700 bg-[#faf6ee]">
-          <iframe
-            key={selected}
-            src={`/?analytics-preview=1${previewAnchor}`}
-            title={`${sectionLabel(selected)} portfolio preview`}
-            loading="lazy"
-            tabIndex={-1}
-            className="pointer-events-none absolute inset-0 h-full w-full border-0 bg-[#faf6ee]"
-          />
-          <div className="pointer-events-none absolute inset-0 bg-slate-950/5" />
-          {selectedClicks.map((click, index) => {
-            const left = click.sectionXPct ?? click.viewportXPct ?? click.xPct;
-            const top = click.sectionYPct ?? click.viewportYPct ?? click.yPct;
-            return (
-              <span
-                key={`${click.occurredAt}-${index}`}
-                title={`${click.target} · ${sectionLabel(click.section)}`}
-                className="pointer-events-none absolute h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border border-yellow-200/90 bg-red-500/55 shadow-[0_0_0_10px_rgba(239,68,68,.16),0_0_26px_rgba(239,68,68,.8)]"
-                style={{ left: `${Math.min(98, Math.max(2, left))}%`, top: `${Math.min(96, Math.max(4, top))}%` }}
-              />
-            );
-          })}
-          {selectedClicks.length === 0 && (
-            <div className="absolute inset-0 grid place-items-center bg-slate-950/65 p-6 text-center backdrop-blur-[2px]">
-              <div>
-                <p className="text-lg font-bold text-white">No clicks recorded here yet</p>
-                <p className="mt-2 max-w-md text-sm text-slate-300">Open the site, use this section normally, then return to diagnostics. New clicks will appear over this preview.</p>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <aside className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-          <h3 className="font-bold text-white">Clicked controls</h3>
-          <p className="mt-1 text-xs leading-relaxed text-slate-500">This turns the dots into something actionable.</p>
-          <div className="mt-5 space-y-3">
-            {targets.length ? targets.map(([target, count], index) => (
-              <div key={target}>
-                <div className="flex items-start justify-between gap-3 text-sm">
-                  <span className="min-w-0 truncate text-slate-300"><span className="mr-2 text-slate-600">{index + 1}</span>{target}</span>
-                  <span className="font-bold text-white">{count}</span>
-                </div>
-                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-800">
-                  <div className="h-full rounded-full bg-rose-400" style={{ width: `${Math.max(8, count / Math.max(1, selectedClicks.length) * 100)}%` }} />
-                </div>
-              </div>
-            )) : <p className="rounded-lg border border-dashed border-slate-700 p-4 text-sm leading-relaxed text-slate-500">No control rankings yet. This panel fills automatically with real clicks.</p>}
-          </div>
-          <p className="mt-6 rounded-lg bg-slate-900 p-3 text-xs leading-relaxed text-slate-400">Red dots show click positions. New events use section-relative coordinates for a closer visual match; older points use their original viewport position.</p>
-        </aside>
-      </div>
-    </article>
+      {open && <div role="dialog" aria-modal="true" aria-label="Scrollable portfolio behaviour map" className="fixed inset-0 z-[200] bg-slate-950">
+        <header className="absolute inset-x-0 top-0 z-10 flex min-h-16 items-center justify-between gap-4 border-b border-slate-700 bg-slate-950/95 px-4 py-3 backdrop-blur sm:px-6"><div><p className="text-xs font-bold uppercase tracking-[.16em] text-rose-400">Behaviour map</p><p className="mt-1 text-sm text-slate-300">Scroll the real site. Red dots are clicks; green labels show sections where people stayed.</p></div><button type="button" onClick={() => setOpen(false)} className="rounded-lg border border-slate-600 px-4 py-2 text-sm font-bold text-white hover:border-slate-400">Close</button></header>
+        <iframe ref={frameRef} src="/?analytics-preview=1" title="Scrollable portfolio with analytics markers" onLoad={() => { addMarkers(); window.setTimeout(addMarkers, 1_000); }} className="h-full w-full border-0 pt-[4.75rem]" />
+        {!clicks.length && <div className="pointer-events-none absolute inset-x-0 top-24 z-10 mx-auto w-fit rounded-full bg-slate-950/90 px-4 py-2 text-sm text-slate-300 shadow-lg">No clicks yet—use the portfolio normally, then reload this map.</div>}
+      </div>}
+    </>
   );
 }
